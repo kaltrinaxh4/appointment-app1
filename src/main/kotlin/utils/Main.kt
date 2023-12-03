@@ -1,41 +1,22 @@
-import controllers.AppointmentAPI
-import models.Appointment
-import mu.KotlinLogging
-import persistence.JSONSerializer
-import utils.CategoryUtility
+import controllers.ClientAPI
+import models.Client
 import utils.ScannerInput
 import utils.ScannerInput.readNextInt
-import utils.ScannerInput.readNextLine
-import utils.ValidateInput.readValidCategory
-import utils.ValidateInput.readValidPriority
-import java.io.File
-import java.lang.System.exit
 
-private val logger = KotlinLogging.logger {}
-//private val AppointmentAPI = AppointmentAPI(XMLSerializer(File("Appointments.xml")))
-private val appointmentAPI = AppointmentAPI(JSONSerializer(File("appointments.json")))
+private val clientAPI = ClientAPI()
 
 fun main(args: Array<String>) {
     runMenu()
 }
 
-fun mainMenu() : Int {
-    return ScannerInput.readNextInt(""" 
+fun mainMenu(): Int {
+    return ScannerInput.readNextInt("""
          > -------------------------------------
-         > |          Appointment APP          |
+         > |       Appointment App          |
          > -------------------------------------
-         > | APPOINTMENT MENU                         |
-         > |   1) Add an Appointment                   |
-         > |   2) List Appointments                   |
-         > |   3) Update an Appointment                |
-         > |   4) Delete an Appointment                |
-         > |   5) Cancel an Appointment               |
-         > |   6) Search Appointment(by description)  |
-         > -------------------------------------
-         > |   20) Save Appointments                  |
-         > |   21) Load Appointments                  |
-         > -------------------------------------
-         > |   0) Exit                         |
+         > | MAIN MENU                                |
+         > |   1) Client Management                   |
+         > |   2) Exit                                   |
          > -------------------------------------
          > ==>> """.trimMargin(">"))
 }
@@ -44,147 +25,145 @@ fun runMenu() {
     do {
         val option = mainMenu()
         when (option) {
-            1  -> addAppointment()
-            2  -> listAppointments()
-            3  -> updateAppointment()
-            4  -> deleteAppointment()
-            5 -> archiveAppointment()
-            6 -> searchAppointment()
-            20  -> save()
-            21  -> load()
-            0  -> exitApp()
-            else -> println("Invalid option entered: ${option}")
+            1 -> runClientMenu()
+            2 -> exitApp()
+            else -> println("Invalid option entered: $option")
         }
     } while (true)
 }
 
-fun addAppointment(){
-    //logger.info { "addAppointment() function invoked" }
-    val appointmentsID = readNextLine("Enter an ID for the Appointment: ")
-    val appointmentPriority = readValidPriority("Enter a priority (1-low, 2, 3, 4, 5-high): ")
-    val appointmentCategory = readValidCategory("Enter a category for the Appointment from ${CategoryUtility.categories}: ")
-    val isAdded = appointmentAPI.add(Appointment(appointmentTitle, appointmentPriority, appointmentCategory, false))
+fun exitApp() {
+    TODO("Not yet implemented")
+}
+
+fun runClientMenu() {
+    do {
+        val option = clientMenu()
+        when (option) {
+            1 -> addClient()
+            2 -> listClients()
+            3 -> updateClient()
+            4 -> deleteClient()
+            5 -> archiveClient()
+            6 -> searchClients()
+            7 -> runAppointmentMenu()
+            20 -> saveClients()
+            21 -> loadClients()
+            0 -> break
+            else -> println("Invalid option entered: $option")
+        }
+    } while (true)
+}
+
+fun loadClients() {
+    TODO("Not yet implemented")
+}
+
+fun saveClients() {
+    TODO("Not yet implemented")
+}
+
+fun clientMenu(): Int {
+    return ScannerInput.readNextInt("""
+         > -------------------------------------
+         > |       Client Management         |
+         > -------------------------------------
+         > | CLIENT MENU                            |
+         > |   1) Add a Client                        |
+         > |   2) List Clients                        |
+         > |   3) Update a Client                     |
+         > |   4) Delete a Client                     |
+         > |   5) Archive a Client                    |
+         > |   6) Search Clients (by name)            |
+         > |   7) Manage Appointments           |
+         > -------------------------------------
+         > |   20) Save Clients                       |
+         > |   21) Load Clients                       |
+         > |   0) Back to Main Menu              |
+         > -------------------------------------
+         > ==>> """.trimMargin(">"))
+}
+
+fun addClient() {
+    val firstName = ScannerInput.readNextLine("Enter the client's first name: ")
+    val lastName = ScannerInput.readNextLine("Enter the client's last name: ")
+    val phoneNumber = ScannerInput.readNextLine("Enter the client's phone number: ")
+    val town = ScannerInput.readNextLine("Enter the client's town: ")
+    val street = ScannerInput.readNextLine("Enter the client's street: ")
+    val city = ScannerInput.readNextLine("Enter the client's city: ")
+
+    val isAdded = clientAPI.add(Client(0, firstName, lastName, phoneNumber, Client.Address(town, street, city)))
 
     if (isAdded) {
-        println("Added Successfully")
+        println("Client Added Successfully")
     } else {
-        println("Add Failed")
+        println("Client Add Failed")
     }
 }
 
-fun listAppointments(){
-    if (appointmentAPI.numberOfAppointments() > 0) {
-        val option = readNextInt(
-            """
-                  > --------------------------------
-                  > |   1) View ALL Appointments          |
-                  > |   2) View ACTIVE sAppointment       |
-                  > |   3) View CANCELLED Appointments     |
-                  > --------------------------------
-         > ==>> """.trimMargin(">"))
-
-        when (option) {
-            1 -> listAllAppointments();
-            2 -> listActiveAppointments();
-            3 -> listCancelledAppointments();
-            else -> println("Invalid option entered: " + option);
-        }
-    } else {
-        println("Option Invalid - No Appointments stored");
-    }
+fun listClients() {
+    println(clientAPI.listAllClients())
 }
 
-fun listAllAppointments() {
-    println(appointmentAPI.listAllAppointments())
-}
+fun updateClient() {
+    listClients()
+    if (clientAPI.numberOfClients() > 0) {
+        val clientId = readNextInt("Enter the ID of the client to update: ")
+        if (clientAPI.isValidIndex(clientId)) {
+            val updatedFirstName = ScannerInput.readNextLine("Enter the updated first name: ")
+            val updatedLastName = ScannerInput.readNextLine("Enter the updated last name: ")
+            val updatedPhoneNumber = ScannerInput.readNextLine("Enter the updated phone number: ")
+            val updatedTown = ScannerInput.readNextLine("Enter the updated town: ")
+            val updatedStreet = ScannerInput.readNextLine("Enter the updated street: ")
+            val updatedCity = ScannerInput.readNextLine("Enter the updated city: ")
 
-fun listActiveAppointment() {
-    println(appointmentAPI.listActiveAppointments())
-}
-
-fun listCancelledAppointments() {
-    println(appointmentAPI.listCancelledAppointments())
-}
-
-fun updateAppointment() {
-    //logger.info { "updateAppointments() function invoked" }
-    listAppointments()
-    if (appointmentAPI.numberOfAppointments() > 0) {
-        //only ask the user to choose the Appointment if Appointments exist
-        val indexToUpdate = readNextInt("Enter the index of the appointment to update: ")
-        if (appointmentAPI.isValidIndex(indexToUpdate)) {
-            val appointmentID = readNextLine("Enter a ID for the appointment: ")
-            val appointmentPriority = readValidPriority("Enter a priority (1-low, 2, 3, 4, 5-high): ")
-            val appointmentCategory = readValidCategory("Enter a category for the appointment from ${CategoryUtility.categories}: ")
-
-            //pass the index of the Appointment and the new Appointment details to AppointmentAPI for updating and check for success.
-            if (appointmentAPI.updateAppointment(indexToUpdate, Appointment(appointmentID, appointmentPriority, appointmentCategory, false))){
+            if (clientAPI.update(clientId, Client(0, updatedFirstName, updatedLastName, updatedPhoneNumber, Client.Address(updatedTown, updatedStreet, updatedCity)))) {
                 println("Update Successful")
             } else {
                 println("Update Failed")
             }
         } else {
-            println("There are no Appointments for this index number")
+            println("There is no client with this ID")
         }
     }
 }
 
-fun deleteAppointment(){
-    //logger.info { "deleteAppointment() function invoked" }
-    listAppointments()
-    if (appointmentAPI.numberOfAppointments() > 0) {
-        //only ask the user to choose the Appointment to delete if notes exist
-        val indexToDelete = readNextInt("Enter the index of the Appointment to delete: ")
-        //pass the index of the note to AppointmentAPI for deleting and check for success.
-        val noteToDelete = appointmentAPI.deleteAppointment(indexToDelete)
-        if (noteToDelete != null) {
-            println("Delete Successful! Deleted Appointment: ${appointmentToDelete.appointmentID}")
+fun deleteClient() {
+    listClients()
+    if (clientAPI.numberOfClients() > 0) {
+        val clientId = readNextInt("Enter the ID of the client to delete: ")
+        val deletedClient = clientAPI.delete(clientId)
+        if (deletedClient) {
+            println("Delete Successful! Deleted Client ID: $clientId")
         } else {
             println("Delete NOT Successful")
         }
     }
 }
 
-fun CancelAppointment() {
-    listActiveAppointments()
-    if (appointmentAPI.numberOfActiveAppointments() > 0) {
-        //only ask the user to choose the Appointment to cancel if active Appointments exist
-        val indexToCancel = readNextInt("Enter the index of the Appointment to cancel: ")
-        //pass the index of the note to AppointmentAPI for cancelling and check for success.
-        if (appointmentAPI.cancelAppointment(indexToCancel)) {
-            println("Cancel Successful!")
+fun archiveClient() {
+    listClients()
+    if (clientAPI.numberOfClients() > 0) {
+        val clientId = readNextInt("Enter the ID of the client to archive: ")
+        if (clientAPI.archiveClient(clientId)) {
+            println("Archive Successful!")
         } else {
-            println("Cancel NOT Successful")
+            println("Archive NOT Successful")
         }
     }
 }
 
-fun searchAppointments() {
-    val searchID = readNextLine("Enter the description to search by: ")
-    val searchResults = appointmentAPI.searchByID(searchID)
+fun searchClients() {
+    val searchString = ScannerInput.readNextLine("Enter the name to search for: ")
+    val searchResults = clientAPI.searchClientsByName(searchString)
     if (searchResults.isEmpty()) {
-        println("No Appointments found")
+        println("No clients found")
     } else {
         println(searchResults)
     }
 }
-fun save() {
-    try {
-        appointmentAPI.store()
-    } catch (e: Exception) {
-        System.err.println("Error writing to file: $e")
-    }
-}
 
-fun load() {
-    try {
-        appointmentAPI.load()
-    } catch (e: Exception) {
-        System.err.println("Error reading from file: $e")
+fun runAppointmentMenu() {
+    do {
+        val option = appointmentMenu()
     }
-}
-
-fun exitApp(){
-    logger.info { "exitApp() function invoked" }
-    exit(0)
-}
