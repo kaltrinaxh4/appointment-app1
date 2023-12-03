@@ -1,7 +1,6 @@
 package controllers
 
 import models.Client
-import models.Appointment
 import utils.Utilities.formatListString
 import java.util.ArrayList
 
