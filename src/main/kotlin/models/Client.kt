@@ -93,3 +93,59 @@ fun listCancelledAppointments(): String =
 private fun numberOfCancelledAppointments(): Any {
 
 }
+fun listAppointmentsBySelectedPriority(priority: Int): String =
+    if (appointments.isEmpty()) "No appointments stored"
+    else {
+        val listOfAppointments = formatListString(appointments.filter{ appointment -> appointment.appointmentPriority == priority})
+        if (listOfAppointments.equals("")) "No appointments with priority: $priority"
+        else "${numberOfAppointmentsByPriority(priority)} appointments with priority $priority: $listOfAppointments"
+    }
+
+fun numberOfAppointments(): Int = appointments.size
+fun numberOfActiveAppointments(): Int = appointments.count{appointment: Appointment -> !appointment.isAppointmentArchived}
+fun numberOfArchivedAppointments(): Int = appointments.count{appointment: Appointment -> appointment.isAppointmentArchived}
+private fun numberOfAppointmentsByPriority(priority: Int): Int = appointments.count { p: Appointment -> p.appointmentPriority == priority }
+
+fun searchByID(searchString: Any) =
+    formatListString(appointments.filter { appointment -> appointment.appointmentID.contains(searchString, ignoreCase = true)})
+
+fun findAppointment(index: Int): Appointment? {
+    return if (isValidListIndex(index, appointments)) {
+        appointments[index]
+    } else null
+}
+
+fun isValidIndex(index: Int) :Boolean{
+    return isValidListIndex(index, appointments);
+}
+
+@Throws(Exception::class)
+fun load() {
+    val serializer = null
+    appointments = serializer.read() as ArrayList<Appointment>
+}
+
+@Throws(Exception::class)
+fun store() {
+    val serializer = null
+    serializer.write(appointments)
+}
+
+private fun formatListString(notesToFormat : List<Appointment>) : String =
+    notesToFormat
+        .joinToString (separator = "\n") { appointment ->
+            appointments.indexOf(appointment).toString() + ": " + appointment.toString() }
+
+}
+
+private fun Nothing?.read(): Any {
+
+}
+
+private fun Nothing?.write(appointments: ArrayList<Appointment>) {
+
+}
+
+private fun <E> ArrayList<E>.count(predicate: (E) -> Unit): Int {
+
+}
