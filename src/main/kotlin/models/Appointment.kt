@@ -10,4 +10,4 @@ data class Appointment(
     val appointmentCostPaid: Double,
     val appointmentSatisfaction: Int,
     var isAppointmentCancelled: Boolean = false
-)//
+)/
