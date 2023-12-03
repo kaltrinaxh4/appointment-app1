@@ -20,3 +20,12 @@ data class Client(
 
 
 }
+data class Appointment(
+    val appointmentId: Int,
+    val client: Client,
+    val serviceType: String,
+    val appointmentDateTime: String,
+    val appointmentDuration: String,
+    val appointmentCostPaid: Double,
+    val appointmentSatisfaction: Int
+)
