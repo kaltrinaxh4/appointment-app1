@@ -99,7 +99,7 @@ class ClientAPI() {
             if (listOfAppointments == "") "No appointments found for: $searchString"
             else listOfAppointments
         }
-    }
+    }/
 
     // ----------------------------------------------
     //  LISTING METHODS FOR APPOINTMENTS
