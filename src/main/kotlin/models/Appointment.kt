@@ -1,7 +1,13 @@
-package models
+import models.Client
+import java.time.LocalDateTime
 
-data class Note (var appointmentID: String,
-                 var appointmentPriority: Int,
-                 var appointmentClient: String,
-                 var isAppointmentCancelled: Boolean){
-}
+data class Appointment(
+    val appointmentId: Int,
+    val client: Client,
+    val serviceType: String,
+    val appointmentDateTime: LocalDateTime, // Updated to use LocalDateTime for date and time
+    val appointmentDuration: String,
+    val appointmentCostPaid: Double,
+    val appointmentSatisfaction: Int,
+    var isAppointmentCancelled: Boolean = false
+)
