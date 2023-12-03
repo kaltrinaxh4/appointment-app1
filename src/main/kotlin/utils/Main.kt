@@ -65,7 +65,7 @@ fun saveClients() {
 
 fun clientMenu(): Int {
     return ScannerInput.readNextInt("""
-         > -------------------------------------
+         > --------------------------------------
          > |       Client Management         |
          > -------------------------------------
          > | CLIENT MENU                            |
