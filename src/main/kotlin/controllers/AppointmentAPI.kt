@@ -1,104 +1,131 @@
-
 package controllers
 
+import models.Client
 import models.Appointment
-import persistence.Serializer
-import utils.Utilities.isValidListIndex
+import utils.Utilities.formatListString
+import java.util.ArrayList
 
-class AppointmentAPI(serializerType: Serializer){
+class ClientAPI() {
 
-    private var serializer: Serializer = serializerType
+    private var clients = ArrayList<Client>()
 
-    private var appointments = ArrayList<Appointment>()
+    // ----------------------------------------------
+    //  For Managing the id internally in the program
+    // ----------------------------------------------
+    private var lastId = 0
+    private fun getId() = lastId++
 
-    fun add(appointment: Appointment): Boolean {
-        return appointments.add(appointment)
+    // ----------------------------------------------
+    //  CRUD METHODS FOR CLIENT ArrayList
+    // ----------------------------------------------
+    fun add(client: Client): Boolean {
+        client.clientId = getId()
+        return clients.add(client)
     }
 
-    fun deleteAppointment(indexToDelete: Int): Appointment? {
-        return if (isValidListIndex(indexToDelete, appointments)) {
-            appointments.removeAt(indexToDelete)
-        } else null
-    }
+    fun delete(id: Int) = clients.removeIf { client -> client.clientId == id }
 
-    fun updateAppointment(indexToUpdate: Int, note: Appointment?): Boolean {
-        //find the note object by the index number
-        val foundAppointment = findAppointment(indexToUpdate)
+    fun update(id: Int, updatedClient: Client?): Boolean {
+        // find the client object by the id
+        val foundClient = findClient(id)
 
-        //if the note exists, use the note details passed as parameters to update the found note in the ArrayList.
-        if ((foundAppointment != null) && (appointment != null)) {
-            foundAppointment.appointmentID = appointment.appointmentID
-            foundAppointment.appointmentPriority = appointment.appointmentPriority
-            foundAppointment.appointmentClient = appointment.appointmentClient
+        // if the client exists, use the details passed as parameters to update the found client in the ArrayList.
+        if ((foundClient != null) && (updatedClient != null)) {
+            foundClient.firstName = updatedClient.firstName
+            foundClient.lastName = updatedClient.lastName
+            foundClient.phoneNumber = updatedClient.phoneNumber
+            foundClient.address = updatedClient.address
             return true
         }
 
-        //if the note was not found, return false, indicating that the update was not successful
+        // if the client was not found, return false, indicating that the update was not successful
         return false
     }
 
-    fun cancelAppointment(indexToCancel: Int): Boolean {
-        if (isValidIndex(indexToCancel)) {
-            val appointmentToCancel = appointments[indexToCancel]
-            if (!appointmentToCancel.isAppointmentCancelled) {
-                appointmentToCancel.isAppointmentCancelled = true
-                return true
+    fun archiveClient(id: Int): Boolean {
+        val foundClient = findClient(id)
+        if ((foundClient != null) && (!foundClient.isClientArchived)) {
+            foundClient.isClientArchived = true
+            return true
+        }
+        return false
+    }
+
+    // ----------------------------------------------
+    //  LISTING METHODS FOR CLIENT ArrayList
+    // ----------------------------------------------
+    fun listAllClients() =
+        if (clients.isEmpty()) "No clients stored"
+        else formatListString(clients)
+
+    fun listActiveClients() =
+        if (numberOfActiveClients() == 0) "No active clients stored"
+        else formatListString(clients.filter { client -> !client.isClientArchived })
+
+    fun listArchivedClients() =
+        if (numberOfArchivedClients() == 0) "No archived clients stored"
+        else formatListString(clients.filter { client -> client.isClientArchived })
+
+    // ----------------------------------------------
+    //  COUNTING METHODS FOR CLIENT ArrayList
+    // ----------------------------------------------
+    fun numberOfClients() = clients.size
+    fun numberOfArchivedClients(): Int = clients.count { client: Client -> client.isClientArchived }
+    fun numberOfActiveClients(): Int = clients.count { client: Client -> !client.isClientArchived }
+
+    // ----------------------------------------------
+    //  SEARCHING METHODS
+    // ---------------------------------------------
+    fun findClient(clientId: Int) = clients.find { client -> client.clientId == clientId }
+
+    fun searchClientsByName(searchString: String) =
+        formatListString(
+            clients.filter { client ->
+                client.firstName.contains(searchString, ignoreCase = true) ||
+                        client.lastName.contains(searchString, ignoreCase = true)
             }
-        }
-        return false
-    }
+        )
 
-    fun listAllAppointments(): String =
-        if (appointments.isEmpty())  "No appointments stored"
-        else formatListString(appointments)
-
-    fun listActiveAppointments(): String =
-        if (numberOfActiveAppointments() == 0) "No active appointments stored"
-        else formatListString(appointments.filter{ appointment -> !appointment.isAppointmentCancelled })
-
-    fun listCancelledAppointments(): String =
-        if (numberOfCancelledAppointments() == 0) "No cancelled appointments stored"
-        else formatListString(appointments.filter{ appointment -> appointment.isAppointmentCancelled })
-
-    fun listAppointmentsBySelectedPriority(priority: Int): String =
-        if (appointments.isEmpty()) "No appointments stored"
+    fun searchAppointmentsByServiceType(searchString: String): String {
+        return if (numberOfClients() == 0) "No clients stored"
         else {
-            val listOfAppointments = formatListString(appointments.filter{ appointment -> appointment.appointmentPriority == priority})
-            if (listOfAppointments.equals("")) "No appointments with priority: $priority"
-            else "${numberOfAppointmentsByPriority(priority)} appointments with priority $priority: $listOfAppointments"
+            var listOfAppointments = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.serviceType.contains(searchString, ignoreCase = true)) {
+                        listOfAppointments += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                    }
+                }
+            }
+            if (listOfAppointments == "") "No appointments found for: $searchString"
+            else listOfAppointments
+        }
+    }
+
+    // ----------------------------------------------
+    //  LISTING METHODS FOR APPOINTMENTS
+    // ----------------------------------------------
+    fun listAppointments(): String =
+        if (numberOfClients() == 0) "No clients stored"
+        else {
+            var listOfAppointments = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    listOfAppointments += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                }
+            }
+            listOfAppointments
         }
 
-    fun numberOfAppointments(): Int = appointments.size
-    fun numberOfActiveAppointments(): Int = appointments.count{appointment: Appointment -> !appointment.isAppointmentArchived}
-    fun numberOfArchivedAppointments(): Int = appointments.count{appointment: Appointment -> appointment.isAppointmentArchived}
-    fun numberOfAppointmentsByPriority(priority: Int): Int = appointments.count { p: Appointment -> p.appointmentPriority == priority }
-
-    fun searchByID(searchString : String) =
-        formatListString(appointments.filter { appointment -> appointment.noteTitle.contains(searchString, ignoreCase = true)})
-
-    fun findAppointment(index: Int): Appointment? {
-        return if (isValidListIndex(index, appointments)) {
-            appointments[index]
-        } else null
+    // ----------------------------------------------
+    //  COUNTING METHODS FOR APPOINTMENTS
+    // ----------------------------------------------
+    fun numberOfAppointments(): Int {
+        var numberOfAppointments = 0
+        for (client in clients) {
+            numberOfAppointments += client.appointments.size
+        }
+        return numberOfAppointments
     }
-
-    fun isValidIndex(index: Int) :Boolean{
-        return isValidListIndex(index, appointments);
-    }
-
-    @Throws(Exception::class)
-    fun load() {
-        appointments = serializer.read() as ArrayList<Appointment>
-    }
-
-    @Throws(Exception::class)
-    fun store() {
-        serializer.write(appointments)
-    }
-
-    private fun formatListString(notesToFormat : List<Appointment>) : String =
-        notesToFormat
-            .joinToString (separator = "\n") { appointment ->
-                appointments.indexOf(appointment).toString() + ": " + appointment.toString() }
 
 }
