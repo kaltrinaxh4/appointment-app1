@@ -11,6 +11,7 @@ class ClientAPI(serializerType: Serializer) {
     private var serializer: Serializer = serializerType
     private var lastClientId = 0
 
+    /////////////////////////functions for client
     fun addClient(client: Client): Boolean {
         client.clientId = getClientId()
         return clients.add(client)
@@ -89,5 +90,5 @@ class ClientAPI(serializerType: Serializer) {
             return "Error"
         }
     }
-
+////////////////functions for appointment
 }
