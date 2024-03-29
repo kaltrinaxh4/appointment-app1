@@ -15,4 +15,3 @@ data class Appointment(var appointmentId: Int = 0,
 
 
 }
-}
