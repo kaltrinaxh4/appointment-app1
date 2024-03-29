@@ -12,3 +12,8 @@ data class Client(var clientId: Int = 0,
                   var allergy: String,
                   var hasPaid: Boolean,
                   var appointments : MutableSet<Appointment> = mutableSetOf()) {
+
+    fun addAppointment(appointment: Appointment): Boolean {
+        appointment.appointmentId = getAppointmentId()
+        return appointments.add(appointment)
+    }
