@@ -51,4 +51,16 @@ data class Client(
     fun deleteAppointment(id: Int): Boolean {
         return appointments.removeIf { appointment -> appointment.appointmentId == id }
     }
+
+    fun checkifAppointmentIsScheduled(): Boolean {
+        if (appointments.isNotEmpty()) {
+            for (appointment in appointments) {
+                if (!appointment.isScheduled) {
+
+                    return false
+                }
+            }
+        }
+        return true
+    }
 }
