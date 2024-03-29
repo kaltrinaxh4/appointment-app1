@@ -1,130 +1,109 @@
 package controllers
 
 import models.Client
-import utils.Utilities.formatListString
+import persistence.Serializer
+import utils.Utilities
 import java.util.ArrayList
 
-class ClientAPI() {
+class ClientAPI(serializerType: Serializer) {
 
     private var clients = ArrayList<Client>()
+    private var serializer: Serializer = serializerType
+    private var lastClientId = 0
 
-    // ----------------------------------------------
-    //  For Managing the id internally in the program
-    // ----------------------------------------------
-    private var lastId = 0
-    private fun getId() = lastId++
-
-    // ----------------------------------------------
-    //  CRUD METHODS FOR CLIENT ArrayList
-    // ----------------------------------------------
-    fun add(client: Client): Boolean {
-        client.clientId = getId()
+    /////////////////////////functions for client
+    fun addClient(client: Client): Boolean {
+        client.clientId = getClientId()
         return clients.add(client)
     }
 
-    fun delete(id: Int) = clients.removeIf { client -> client.clientId == id }
+    private fun getClientId() = lastClientId++
 
-    fun update(id: Int, updatedClient: Client?): Boolean {
-        // find the client object by the id
-        val foundClient = findClient(id)
-
-        // if the client exists, use the details passed as parameters to update the found client in the ArrayList.
-        if ((foundClient != null) && (updatedClient != null)) {
-            foundClient.firstName = updatedClient.firstName
-            foundClient.lastName = updatedClient.lastName
-            foundClient.phoneNumber = updatedClient.phoneNumber
-            foundClient.address = updatedClient.address
-            return true
-        }
-
-        // if the client was not found, return false, indicating that the update was not successful
-        return false
-    }
-
-    fun archiveClient(id: Int): Boolean {
-        val foundClient = findClient(id)
-        if ((foundClient != null) && (!foundClient.isClientArchived)) {
-            foundClient.isClientArchived = true
-            return true
-        }
-        return false
-    }
-
-    // ----------------------------------------------
-    //  LISTING METHODS FOR CLIENT ArrayList
-    // ----------------------------------------------
     fun listAllClients() =
-        if (clients.isEmpty()) "No clients stored"
-        else formatListString(clients)
+        if (clients.isEmpty()) {
+            "No clients stored"
+        } else {
+            Utilities.formatListString(clients)
+        }
 
-    fun listActiveClients() =
-        if (numberOfActiveClients() == 0) "No active clients stored"
-        else formatListString(clients.filter { client -> !client.isClientArchived })
-
-    fun listArchivedClients() =
-        if (numberOfArchivedClients() == 0) "No archived clients stored"
-        else formatListString(clients.filter { client -> client.isClientArchived })
-
-    // ----------------------------------------------
-    //  COUNTING METHODS FOR CLIENT ArrayList
-    // ----------------------------------------------
     fun numberOfClients() = clients.size
-    fun numberOfArchivedClients(): Int = clients.count { client: Client -> client.isClientArchived }
-    fun numberOfActiveClients(): Int = clients.count { client: Client -> !client.isClientArchived }
 
-    // ----------------------------------------------
-    //  SEARCHING METHODS
-    // ---------------------------------------------
-    fun findClient(clientId: Int) = clients.find { client -> client.clientId == clientId }
+    fun updateClient(id: Int, client: Client?): Boolean {
+        val foundClient = findClientById(id)
+        if ((foundClient != null) && (client != null)) {
+            foundClient.firstName = client.firstName
+            foundClient.lastName = client.lastName
+            foundClient.address = client.address
+            foundClient.email = client.email
+            foundClient.phone = client.phone
+            foundClient.extraInfo = client.extraInfo
+            return true
+        }
+        return false
+    }
 
-    fun searchClientsByName(searchString: String) =
-        formatListString(
-            clients.filter { client ->
-                client.firstName.contains(searchString, ignoreCase = true) ||
-                        client.lastName.contains(searchString, ignoreCase = true)
-            }
+    fun findClientById(clientId: Int) = clients.find { client -> client.clientId == clientId }
+
+    fun searchClientByFirstName(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.firstName.contains(searchString, ignoreCase = true) }
         )
 
-    fun searchAppointmentsByServiceType(searchString: String): String {
-        return if (numberOfClients() == 0) "No clients stored"
-        else {
-            var listOfAppointments = ""
-            for (client in clients) {
-                for (appointment in client.appointments) {
-                    if (appointment.serviceType.contains(searchString, ignoreCase = true)) {
-                        listOfAppointments += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
-                    }
-                }
-            }
-            if (listOfAppointments == "") "No appointments found for: $searchString"
-            else listOfAppointments
+    fun searchClientByLastName(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.lastName.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchClientByAddress(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.address.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchClientByEmail(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.email.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchClientByPhone(searchInt: Int) =
+        Utilities.formatListString(
+            clients.filter { client -> client.phone == searchInt }
+        )
+
+    fun findClient(index: Int): Client? {
+        return if (Utilities.isValidListIndex(index, clients)) {
+            clients[index]
+        } else {
+            null
         }
     }
 
-    // ----------------------------------------------
-    //  LISTING METHODS FOR APPOINTMENTS
-    // ----------------------------------------------
-    fun listAppointments(): String =
-        if (numberOfClients() == 0) "No clients stored"
-        else {
-            var listOfAppointments = ""
-            for (client in clients) {
-                for (appointment in client.appointments) {
-                    listOfAppointments += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+    fun deleteClient(id: Int) = clients.removeIf { client -> client.clientId == id }
+
+    fun clearAllClients() = clients.clear()
+
+    fun checkIfThereAreClients(): String {
+        if (clients.isNotEmpty()) {
+            return "Currently there are clients stored"
+        } else if (clients.isEmpty()) {
+            return "Currently there are no clients stored"
+        } else {
+            return "Error"
+        }
+    }
+////////////////functions for appointment
+fun listScheduledAppointments(): String =
+    if (numberOfClients() == 0) {
+        "No clients stored"
+    } else {
+        var listOfScheduledAppointments = ""
+        for (client in clients) {
+            for (appointment in client.appointments) {
+                if (appointment.isScheduled) {
+                    listOfScheduledAppointments += "${client.firstName} ${client.lastName}: ${appointment.date}${appointment.treatment}\n"
                 }
             }
-            listOfAppointments
         }
-
-    // ----------------------------------------------
-    //  COUNTING METHODS FOR APPOINTMENTS
-    // ----------------------------------------------
-    fun numberOfAppointments(): Int {
-        var numberOfAppointments = 0
-        for (client in clients) {
-            numberOfAppointments += client.appointments.size
-        }
-        return numberOfAppointments
+        listOfScheduledAppointments
     }
 
 }
