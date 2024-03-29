@@ -14,5 +14,14 @@ class ClientAPI(serializerType: Serializer) {
         client.clientId = getClientId()
         return clients.add(client)
     }
+
     private var lastClientId = 0
     fun getClientId() = lastClientId++
+
+    fun listAllClients() =
+        if (clients.isEmpty()) {
+            "No clients stored"
+        } else {
+            Utilities.formatListString(clients)
+        }
+}
