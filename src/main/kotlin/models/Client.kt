@@ -17,3 +17,7 @@ data class Client(var clientId: Int = 0,
         appointment.appointmentId = getAppointmentId()
         return appointments.add(appointment)
     }
+
+    private var lastAppointmentId = 0
+    private fun getAppointmentId() = lastAppointmentId++
+}
