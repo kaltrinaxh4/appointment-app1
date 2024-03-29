@@ -91,4 +91,19 @@ class ClientAPI(serializerType: Serializer) {
         }
     }
 ////////////////functions for appointment
+fun listScheduledAppointments(): String =
+    if (numberOfClients() == 0) {
+        "No clients stored"
+    } else {
+        var listOfScheduledAppointments = ""
+        for (client in clients) {
+            for (appointment in client.appointments) {
+                if (appointment.isScheduled) {
+                    listOfScheduledAppointments += "${client.firstName} ${client.lastName}: ${appointment.date}${appointment.treatment}\n"
+                }
+            }
+        }
+        listOfScheduledAppointments
+    }
+
 }
