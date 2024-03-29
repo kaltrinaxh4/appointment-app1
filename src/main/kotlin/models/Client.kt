@@ -1,6 +1,8 @@
 
 package models
 
+import utils.Utilities
+
 
 data class Client(var clientId: Int = 0,
                   var firstName: String,
@@ -21,3 +23,6 @@ data class Client(var clientId: Int = 0,
     private var lastAppointmentId = 0
     private fun getAppointmentId() = lastAppointmentId++
 }
+fun listAppointments() =
+    if (appointments.isEmpty()) "\tNO APPOINTMENTS ADDED"
+    else Utilities.formatSetString(appointments)
