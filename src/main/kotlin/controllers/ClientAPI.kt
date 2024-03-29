@@ -40,3 +40,4 @@ fun updateClient(id: Int, client: Client?): Boolean {
     }
     return false
 }
+fun findClientById(clientId: Int) = clients.find { client -> client.clientId == clientId }
