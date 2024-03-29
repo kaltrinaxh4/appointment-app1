@@ -7,7 +7,8 @@ import java.util.ArrayList
 
 class ClientAPI(serializerType: Serializer) {
 
-
+    private var clients = ArrayList<Client>()
+    private var serializer: Serializer = serializerType
 
     fun addClient(client: Client): Boolean {
         client.clientId = getClientId()
