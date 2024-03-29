@@ -42,4 +42,29 @@ class ClientAPI(serializerType: Serializer) {
     }
 
     fun findClientById(clientId: Int) = clients.find { client -> client.clientId == clientId }
+
+    fun searchClientByFirstName(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.firstName.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchClientByLastName(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.lastName.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchClientByAddress(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.address.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchClientByEmail(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.email.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchClientByPhone(searchInt: Int) =
+        Utilities.formatListString(
+            clients.filter { client -> client.phone == searchInt }
+        )
 }
