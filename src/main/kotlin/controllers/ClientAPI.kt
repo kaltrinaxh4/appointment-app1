@@ -68,3 +68,16 @@ class ClientAPI(serializerType: Serializer) {
             clients.filter { client -> client.phone == searchInt }
         )
 }
+fun updateClient(id: Int, client: Client?): Boolean {
+    val foundClient = findClientById(id)
+    if ((foundClient != null) && (client != null)) {
+        foundClient.firstName = client.firstName
+        foundClient.lastName = client.lastName
+        foundClient.address = client.address
+        foundClient.email = client.email
+        foundClient.phone = client.phone
+        foundClient.extraInfo = client.extraInfo
+        return true
+    }
+    return false
+}
