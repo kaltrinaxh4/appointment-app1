@@ -41,3 +41,6 @@ fun updateAppointment(id: Int, newAppointment: Appointment): Boolean {
 
     return false
 }
+fun findAppointmentById(id: Int): Appointment? {
+    return appointments.find { appointment -> appointment.appointmentId == id }
+}
