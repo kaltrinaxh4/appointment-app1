@@ -63,9 +63,7 @@ data class Client(
     }
 
     override fun toString(): String {
-        val hasPaid = if (hasPaid) "Yes" else "No"
         return "$clientId: $firstName $lastName, Address($address), Email($email), Phone($phone) \n${listAppointments()}"
     }
 
-}
 }
