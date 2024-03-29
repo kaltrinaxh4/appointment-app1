@@ -14,3 +14,5 @@ class ClientAPI(serializerType: Serializer) {
         client.clientId = getClientId()
         return clients.add(client)
     }
+    private var lastClientId = 0
+    fun getClientId() = lastClientId++
