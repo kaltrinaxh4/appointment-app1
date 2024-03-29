@@ -81,3 +81,10 @@ fun updateClient(id: Int, client: Client?): Boolean {
     }
     return false
 }
+fun findClient(index: Int): Client? {
+    return if (Utilities.isValidListIndex(index, clients)) {
+        clients[index]
+    } else {
+        null
+    }
+}
