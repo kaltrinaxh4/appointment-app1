@@ -79,4 +79,15 @@ class ClientAPI(serializerType: Serializer) {
     fun deleteClient(id: Int) = clients.removeIf { client -> client.clientId == id }
 
     fun clearAllClients() = clients.clear()
+
+    fun checkIfThereAreClients(): String {
+        if (clients.isNotEmpty()) {
+            return "Currently there are clients stored"
+        } else if (clients.isEmpty()) {
+            return "Currently there are no clients stored"
+        } else {
+            return "Error"
+        }
+    }
+
 }
