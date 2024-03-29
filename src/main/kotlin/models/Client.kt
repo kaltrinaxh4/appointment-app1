@@ -26,3 +26,8 @@ data class Client(var clientId: Int = 0,
 fun listAppointments() =
     if (appointments.isEmpty()) "\tNO APPOINTMENTS ADDED"
     else Utilities.formatSetString(appointments)
+
+fun addAppointment(appointment: Appointment): Boolean {
+    appointment.appointmentId = getAppointmentId()
+    return appointments.add(appointment)
+}
