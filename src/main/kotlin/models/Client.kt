@@ -24,10 +24,20 @@ data class Client(var clientId: Int = 0,
     private fun getAppointmentId() = lastAppointmentId++
 }
 fun listAppointments() =
-    if (appointments.isEmpty()) "\tNO APPOINTMENTS ADDED"
+    if (appointments.isEmpty()) "\tNO APPOINTMENTS FOUND"
     else Utilities.formatSetString(appointments)
 
-fun addAppointment(appointment: Appointment): Boolean {
-    appointment.appointmentId = getAppointmentId()
-    return appointments.add(appointment)
+fun updateAppointment(id: Int, newAppointment: Appointment): Boolean {
+    val foundAppointment = findAppointmentById(id)
+
+    if (foundAppointment != null) {
+        foundAppointment.time = newAppointment.time
+        foundAppointment.date = newAppointment.date
+        foundAppointment.treatment = newAppointment.treatment
+        foundAppointment.price = newAppointment.price
+        foundAppointment.review = newAppointment.review
+        return true
+    }
+
+    return false
 }
