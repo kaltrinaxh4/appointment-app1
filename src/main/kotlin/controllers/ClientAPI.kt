@@ -24,4 +24,6 @@ class ClientAPI(serializerType: Serializer) {
         } else {
             Utilities.formatListString(clients)
         }
+
+    fun numberOfClients() = clients.size
 }
