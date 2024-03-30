@@ -104,3 +104,14 @@ fun addClient(hasPaid: Boolean) {
         println("Add Failed")
     }
 }
+fun runAppointmentMenu() {
+    do {
+        val option = appointmentMenu()
+
+        when (option) {
+            in 15..18 -> processAppointmentMenuOption(option)
+            0 -> return  // Return to the main menu
+            else -> println("Invalid menu choice: $option")
+        }
+    } while (true)
+}
