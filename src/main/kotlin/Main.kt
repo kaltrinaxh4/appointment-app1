@@ -234,3 +234,10 @@ fun listClients() {
 }
 fun listAllClients() = println(clientAPI.listAllClients())
 fun listNumberOfAllClients() = println(clientAPI.numberOfClients())
+
+fun listScheduledAppointments(){
+    if (clientAPI.listScheduledAppointments() > 0.toString()) {
+        println("Total Confirmed Appointments: ${clientAPI.listScheduledAppointments()}")
+    }
+    println(clientAPI.listScheduledAppointments())
+}
