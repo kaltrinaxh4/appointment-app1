@@ -5,9 +5,12 @@ import models.Client
 
 import persistence.XMLSerializer
 import utils.ScannerInput
+import utils.ScannerInput.readNextInt
+import utils.ScannerInput.readNextLine
 import utils.ValidateInput
 import utils.ValidateInput.readValidCategory
 import utils.ValidateInput.readValidDateofAppointment
+import utils.ValidateInput.readValidPhone
 import utils.ValidateInput.readValidReview
 
 
@@ -240,4 +243,28 @@ fun listScheduledAppointments(){
         println("Total Confirmed Appointments: ${clientAPI.listScheduledAppointments()}")
     }
     println(clientAPI.listScheduledAppointments())
+}
+
+fun updateClient() {
+    listClients()
+    if (clientAPI.numberOfClients() > 0) {
+        // only ask the user to choose the note if notes exist
+        val id = readNextInt("Enter the id of the note to update: ")
+        if (clientAPI.findClientById(id) != null) {
+            val firstName = readNextLine("Enter the client's first name:  ")
+            val lastName = readNextLine("Enter the client's last name:  ")
+            val address = readNextLine("Enter the client's address:  ")
+            val phone = readValidPhone("Enter the client's phone number:  ")
+
+
+            // pass the index of the note and the new note details to NoteAPI for updating and check for success.
+            if (clientAPI.updateClient(id, Client(0, firstName, lastName, street, county, email, phone, allergy))){
+                println("Update was Successful")
+            } else {
+                println("Update has Failed")
+            }
+        } else {
+            println("There are no clients available for this index number")
+        }
+    }
 }
