@@ -20,3 +20,12 @@ fun runMenu() {
         }
     } while (true)
 }
+fun readCategoryChoice(): Int {
+    println("Select a category:")
+    println("1. Client Menu")
+    println("2. Appointment Menu")
+    println("3. Searching Menu")
+    println("0. Exit")
+    print("Enter your choice: ")
+    return readLine()?.toIntOrNull() ?: -1
+}
