@@ -67,12 +67,12 @@ object ValidateInput
 
 
     @JvmStatic
-    fun readValidDate(prompt: String?): String
+    fun readValidDateofAppointment(prompt: String?): String
     {
         print(prompt)
         var input = Scanner(System.`in`).nextLine()
         do {
-            if (DateUtility.isDateValid(input))
+            if (DateofAppointmentUtility.isDateCorrect(input))
                 return input
             else {
                 print("Invalid date $input.  Please try again: ")
