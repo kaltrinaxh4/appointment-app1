@@ -143,3 +143,31 @@ fun appointmentMenu(): Int {
     print("Enter your choice: ")
     return readLine()?.toIntOrNull() ?: -1
 }
+fun searchingMenu(): Int {
+    println(""" 
+        >-----------------------------------------------------
+        > CLIENT SEARCH MENU 
+        > 7) Search for a client by their Id
+        > 8) Search for a client by their first name 
+        > 9) Search for a client by their last name 
+        > 10) Search for a client by their street 
+        > 11) Search for a client by their county 
+        > 12) Search for a client by their email 
+        > 13) Search for a client by their phone number 
+        > 14) Search for a client by their allergy 
+        > ----------------------------------------------------- 
+        > APPOINTMENT SEARCH MENU
+        > 19) Search for an appointment by its Id 
+        > 20) Search for an appointment by its time 
+        > 21) Search for an appointment by its date 
+        > 22) Search for an appointment by its treatments 
+        > 23) Search for an appointment by its cost 
+        > 24) Search for an appointment by its rating 
+        > ----------------------------------------------------- 
+        > 0) Back to main menu
+        > ----------------------------------------------------- 
+        > ==>> """.trimMargin(">"))
+
+    print("Enter your choice: ")
+    return readLine()?.toIntOrNull() ?: -1
+}
