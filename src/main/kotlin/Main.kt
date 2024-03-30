@@ -210,3 +210,25 @@ fun addAppointmentForClient(isScheduled: Boolean) {
         else println("Add is Not Complete")
     }
 }
+fun listClients() {
+    if (clientAPI.numberOfClients() > 0) {
+        val option = ScannerInput.readNextInt(
+            """
+                  > --------------------------------
+                  > 1) View ALL Clients 
+                  > 2) List the NUMBER OF ALL Clients 
+              
+                  > --------------------------------
+         > ==>> """.trimMargin(">")
+        )
+
+        when (option) {
+            1 -> listAllClients()
+            2 -> listNumberOfAllClients()
+
+            else -> println("Invalid option entered: $option")
+        }
+    } else {
+        println("Option Invalid - No clients stored")
+    }
+}
