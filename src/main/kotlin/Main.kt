@@ -233,3 +233,4 @@ fun listClients() {
     }
 }
 fun listAllClients() = println(clientAPI.listAllClients())
+fun listNumberOfAllClients() = println(clientAPI.numberOfClients())
