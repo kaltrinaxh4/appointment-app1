@@ -1,19 +1,19 @@
-
 import controllers.ClientAPI
 import models.Appointment
 import models.Client
-
+//import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.ScannerInput
+//import utils.ScannerInput
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import utils.ValidateInput
-import utils.ValidateInput.readValidCategory
 import utils.ValidateInput.readValidDateofAppointment
+
 import utils.ValidateInput.readValidPhone
 import utils.ValidateInput.readValidReview
-
-
+import utils.ValidateInput.readValidTime
+import utils.ValidateInput.readValidCategory
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -58,20 +58,16 @@ fun runClientMenu() {
 }
 fun processClientMenuOption(option: Int) {
     when (option) {
-        1 -> {
-            val hasPaidUserInput = readBooleanFromUserInputOfClientPaymentStatus()
-            addClient(hasPaidUserInput)
-        }
+        1 -> addClient()
         2 -> listClients()
-        3 -> {
-            val hasPaidUserInput = readBooleanFromUserInputOfClientPaymentStatus()
-            updateClient(hasPaidUserInput)
-        }
+        3 -> updateClient()
         4 -> deleteClient()
         5 -> clearAllClients()
         6 -> checkIfThereAreClients()
-
+        else -> println("Invalid menu choice: $option")
     }
+}
+
 }
 fun clientMenu(): Int {
     println(""" 
@@ -103,11 +99,11 @@ fun addClient(hasPaid: Boolean) {
     val email = ScannerInput.readNextLine("Enter the client's email: ")
     val phone = ValidateInput.readValidPhone("Enter the client's phone number: ")
     val extraInfo = ScannerInput.readNextLine("Enter the client's allergies: ")
-    val isAdded = clientAPI.addClient(Client(firstName = firstName, lastName = lastName, street = street, county = county, email = email, phone = phone, allergy = allergy, hasPaid = hasPaid))
+    val isAdded = clientAPI.addClient(Client(firstName = firstName, lastName = lastName, address = address,  email = email, phone = phone, extraInfo = extraInfo))
     if (isAdded) {
         println("Added Successfully")
     } else {
-        println("Add Failed")
+        println("Add has Failed")
     }
 }
 fun runAppointmentMenu() {
@@ -181,7 +177,7 @@ fun processAppointmentMenuOption(option: Int) {
             val isConfirmedUserInput = readBooleanFromUserInputOfAppointmentConfirmationStatus()
             addAppointmentForClient(isConfirmedUserInput)
         }
-        16 -> listConfirmedAppointments()
+        16 -> listScheduledAppointments()
         17 -> {
             val isConfirmedUserInput = readBooleanFromUserInputOfAppointmentConfirmationStatus()
             updateAppointmentForClient(isConfirmedUserInput)
@@ -258,7 +254,7 @@ fun updateClient() {
 
 
             // pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (clientAPI.updateClient(id, Client(0, firstName, lastName, street, county, email, phone, allergy))){
+            if (clientAPI.updateClient(id, Client(0, firstName, lastName, address, phone ))){
                 println("Update was Successful")
             } else {
                 println("Update has Failed")
