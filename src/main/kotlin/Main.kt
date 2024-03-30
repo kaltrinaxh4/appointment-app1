@@ -12,7 +12,6 @@ import utils.ValidateInput.readValidDateofAppointment
 
 import utils.ValidateInput.readValidPhone
 import utils.ValidateInput.readValidReview
-import utils.ValidateInput.readValidTime
 import utils.ValidateInput.readValidCategory
 import java.io.File
 import kotlin.system.exitProcess
@@ -62,25 +61,26 @@ fun processClientMenuOption(option: Int) {
         2 -> listClients()
         3 -> updateClient()
         4 -> deleteClient()
-        5 -> clearAllClients()
-        6 -> checkIfThereAreClients()
+        5 -> checkIfThereAreClients()
+        6 -> clearAllClients()
         else -> println("Invalid menu choice: $option")
     }
 }
 
-}
+
 fun clientMenu(): Int {
     println(""" 
         >-----------------------------------------------------
-        >             NOTE KEEPER APP                  
+        >             Client-Appointment APP                  
         >-----------------------------------------------------
         > CLIENT MENU
         > 1) Add a client 
         > 2) List clients 
         > 3) Update a client 
         > 4) Delete a client 
-        > 5) Clear all clients from the system 
-        > 6) Check if there are clients in the system 
+        > 5) Check if there are clients stored in the system
+        > 6) Clear all clients from the data system 
+       
         > -----------------------------------------------------
         > 23) Load clients
         > 24) Save clients 
@@ -92,13 +92,13 @@ fun clientMenu(): Int {
     return readLine()?.toIntOrNull() ?: -1
 }
 
-fun addClient(hasPaid: Boolean) {
+fun addClient() {
     val firstName = ScannerInput.readNextLine("Enter the client's first name: ")
     val lastName = ScannerInput.readNextLine("Enter the client's last name: ")
     val address = ScannerInput.readNextLine("Enter the client's address: ")
     val email = ScannerInput.readNextLine("Enter the client's email: ")
     val phone = ValidateInput.readValidPhone("Enter the client's phone number: ")
-    val extraInfo = ScannerInput.readNextLine("Enter the client's allergies: ")
+    val extraInfo = ScannerInput.readNextLine("Enter the client's extra information: ")
     val isAdded = clientAPI.addClient(Client(firstName = firstName, lastName = lastName, address = address,  email = email, phone = phone, extraInfo = extraInfo))
     if (isAdded) {
         println("Added Successfully")
@@ -106,12 +106,13 @@ fun addClient(hasPaid: Boolean) {
         println("Add has Failed")
     }
 }
+
 fun runAppointmentMenu() {
     do {
         val option = appointmentMenu()
 
         when (option) {
-            in 15..18 -> processAppointmentMenuOption(option)
+            in 7..10 -> processAppointmentMenuOption(option)
             0 -> return  // Return to the main menu
             else -> println("Invalid menu choice: $option")
         }
@@ -122,7 +123,7 @@ fun runSearchingMenu() {
         val option = searchingMenu()
 
         when (option) {
-            in 7..14, in 19..24 -> processSearchingMenuOption(option)
+            in 11..16, in 17..22 -> processSearchingMenuOption(option)
             0 -> return  // Return to the main menu
             else -> println("Invalid menu choice: $option")
         }
@@ -132,10 +133,10 @@ fun appointmentMenu(): Int {
     println(""" 
         >-----------------------------------------------------
         > APPOINTMENT MENU
-        > 13) Add an appointment 
-        > 14) List confirmed appointments 
-        > 15) Update an appointment 
-        > 16) Delete an appointment 
+        > 7) Add an appointment 
+        > 8) List confirmed appointments 
+        > 9) Update an appointment 
+        > 10) Delete an appointment 
         > -----------------------------------------------------  
      
         > 0) Back to main menu
@@ -145,24 +146,25 @@ fun appointmentMenu(): Int {
     print("Enter your choice: ")
     return readLine()?.toIntOrNull() ?: -1
 }
+
 fun searchingMenu(): Int {
     println(""" 
         >-----------------------------------------------------
         > CLIENT SEARCH MENU 
-        > 7) Search for a client by their Id
-        > 8) Search for a client by their first name 
-        > 9) Search for a client by their last name 
-        > 10) Search for a client by their address 
-        > 11) Search for a client by their email 
-        > 12) Search for a client by their phone number 
+        > 11) Search for a client by their Id
+        > 12) Search for a client by their first name 
+        > 13) Search for a client by their last name 
+        > 14) Search for a client by their address 
+        > 15) Search for a client by their email 
+        > 16) Search for a client by their phone number 
         > ----------------------------------------------------- 
         > APPOINTMENT SEARCH MENU
         > 17) Search for an appointment by its Id 
         > 18) Search for an appointment by its time 
         > 19) Search for an appointment by its date 
-        > 20) Search for an appointment by its treatments 
-        > 21) Search for an appointment by its cost 
-        > 22) Search for an appointment by its rating 
+        > 20) Search for an appointment by its category of treatment 
+        > 21) Search for an appointment by its price 
+        > 22) Search for an appointment by its review 
         > ----------------------------------------------------- 
         > 0) Back to main menu
         > ----------------------------------------------------- 
@@ -180,13 +182,17 @@ fun processAppointmentMenuOption(option: Int) {
         16 -> listScheduledAppointments()
         17 -> {
             val isConfirmedUserInput = readBooleanFromUserInputOfAppointmentConfirmationStatus()
-            updateAppointmentForClient(isConfirmedUserInput)
+            updateAppointmentForClient(isConfirmedUserInput, readNextInt("Enter the ID of the client: "))
         }
-        18 -> deleteAnAppointmentForAClient()
-
+        18 -> {
+            val id = readNextInt("Enter the ID of the client: ")
+            deleteAnAppointmentForAClient(id)
+        }
         else -> println("Invalid menu choice: $option")
     }
 }
+
+
 fun processSearchingMenuOption(option: Int) {
     when (option) {
         in 7..14 -> processClientMenuOption(option) // Reusing processClientMenuOption for client search options
@@ -196,18 +202,32 @@ fun processSearchingMenuOption(option: Int) {
 }
 
 fun addAppointmentForClient(isScheduled: Boolean) {
-    val client: Client
-        if (client.addAppointment(Appointment(
-                time = ValidateInput.readValidTime("\t Appointment Time, in the form 09.00: "),
-                date = readValidDateofAppointment("\t Appointment Date: "),
-                treatment = readValidCategory("\t Appointment Services: "),
-               price = ScannerInput.readNextInt("\t Appointment Cost:"),
-                isScheduled = isScheduled,
-                review = readValidReview("\t Appointment review:")
-            )))
-            println("Add is Complete!")
-        else println("Add is Not Complete")
+    val clientId = readNextInt("Enter the ID of the client: ")
+    val client = clientAPI.findClientById(clientId)
+    if (client != null) {
+        val appointment = createAppointmentFromUserInput(isScheduled)
+        if (appointment != null) {
+            val isAdded = client.addAppointment(appointment)
+            if (isAdded) {
+                println("Appointment added successfully.")
+            } else {
+                println("Failed to add appointment.")
+            }
+        } else {
+            println("Invalid appointment details.")
+        }
+    } else {
+        println("Client not found with ID: $clientId")
     }
+}
+fun createAppointmentFromUserInput(isScheduled: Boolean): Appointment? {
+    val time = ValidateInput.readValidTime("Enter the appointment time (in the form 09.00): ")
+    val date = ValidateInput.readValidDateofAppointment("Enter the appointment date: ")
+    val treatment = ValidateInput.readValidCategory("Enter the treatment for the appointment: ")
+    val price = readNextInt("Enter the price for the appointment: ")
+    val review = ValidateInput.readValidReview("Enter the review for the appointment: ")
+
+    return Appointment(time = time, date = date, treatment = treatment, price = price, review = review, isScheduled = isScheduled)
 }
 fun listClients() {
     if (clientAPI.numberOfClients() > 0) {
@@ -244,17 +264,18 @@ fun listScheduledAppointments(){
 fun updateClient() {
     listClients()
     if (clientAPI.numberOfClients() > 0) {
-        // only ask the user to choose the note if notes exist
-        val id = readNextInt("Enter the id of the note to update: ")
+        // Only ask the user to choose the client if clients exist
+        val id = readNextInt("Enter the id of the client to update: ")
         if (clientAPI.findClientById(id) != null) {
             val firstName = readNextLine("Enter the client's first name:  ")
             val lastName = readNextLine("Enter the client's last name:  ")
             val address = readNextLine("Enter the client's address:  ")
             val phone = readValidPhone("Enter the client's phone number:  ")
+            val email = readNextLine("Enter the client's email: ") // Ensure email is obtained from user input
+            val extraInfo = readNextLine("Enter the client's extraInfo:  ")
 
-
-            // pass the index of the note and the new note details to NoteAPI for updating and check for success.
-            if (clientAPI.updateClient(id, Client(0, firstName, lastName, address, phone ))){
+            // Pass the id and new client details to ClientAPI for updating and check for success.
+            if (clientAPI.updateClient(id, Client(firstName = firstName, lastName = lastName, address = address, email = email, phone = phone, extraInfo = extraInfo))){
                 println("Update was Successful")
             } else {
                 println("Update has Failed")
@@ -264,8 +285,9 @@ fun updateClient() {
         }
     }
 }
-fun updateAppointmentForClient(isScheduled: Boolean){
-    val client: Client? = clientAPI.findClientById(id) // Assuming clientAPI is accessible
+
+fun updateAppointmentForClient(isScheduled: Boolean, id: Int) {
+    val client: Client? = clientAPI.findClientById(id)
     if (client != null) {
         val appointment: Appointment? = askUserToChooseAppointment(client)
         if (appointment != null) {
@@ -287,6 +309,7 @@ fun updateAppointmentForClient(isScheduled: Boolean){
     }
 }
 
+
 fun deleteClient()
 {
     listClients()
@@ -302,8 +325,8 @@ fun deleteClient()
         }
     }
 }
-fun deleteAnAppointmentForAClient() {
-    val client: Client? = clientAPI.findClientById(id) // Assuming clientAPI is accessible
+fun deleteAnAppointmentForAClient(id: Int) {
+    val client: Client? = clientAPI.findClientById(id)
     if (client != null) {
         val appointment: Appointment? = askUserToChooseAppointment(client)
         if (appointment != null) {
@@ -316,6 +339,7 @@ fun deleteAnAppointmentForAClient() {
         }
     }
 }
+
 fun clearAllClients()
 {
     clientAPI.clearAllClients()
@@ -478,26 +502,12 @@ fun exitApp()
     println("Exiting...bye")
     exitProcess(0)
 }
-fun readBooleanFromUserInputOfClientPaymentStatus(): Boolean
-{
-    while (true)
-    {
-        val input = readNextLine("Enter true or false to indicate whether the client has paid or not: ")
-        if (input.equals("true", ignoreCase = true)) {
-            return true
-        } else if (input.equals("false", ignoreCase = true)) {
-            return false
-        } else
-        {
-            println("Invalid input. Please enter 'true' or 'false'.")
-        }
-    }
-}
+
 fun readBooleanFromUserInputOfAppointmentConfirmationStatus(): Boolean
 {
     while (true)
     {
-        val input = readNextLine("Enter true or false to indicate whether the appointment is confirmed or not: ")
+        val input = readNextLine("Enter true or false to indicate whether the appointment is Scheduled or not: ")
         if (input.equals("true", ignoreCase = true)) {
             return true
         } else if (input.equals("false", ignoreCase = true)) {
