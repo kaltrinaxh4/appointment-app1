@@ -59,10 +59,6 @@ class ClientAPI(serializerType: Serializer) {
             clients.filter { client -> client.address.contains(searchString, ignoreCase = true) }
         )
 
-    fun searchClientByEmail(searchString: String) =
-        Utilities.formatListString(
-            clients.filter { client -> client.email.contains(searchString, ignoreCase = true) }
-        )
 
     fun searchClientByPhone(searchInt: Int) =
         Utilities.formatListString(
@@ -90,20 +86,29 @@ class ClientAPI(serializerType: Serializer) {
             return "Error"
         }
     }
-////////////////functions for appointment
-fun listScheduledAppointments(): String =
-    if (numberOfClients() == 0) {
-        "No clients stored"
-    } else {
-        var listOfScheduledAppointments = ""
-        for (client in clients) {
-            for (appointment in client.appointments) {
-                if (appointment.isScheduled) {
-                    listOfScheduledAppointments += "${client.firstName} ${client.lastName}: ${appointment.date}${appointment.treatment}\n"
+    ////////////////functions for appointment
+    fun listScheduledAppointments(): String =
+        if (numberOfClients() == 0) {
+            "No clients stored"
+        } else {
+            var listOfScheduledAppointments = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.isScheduled) {
+                        listOfScheduledAppointments += "${client.firstName} ${client.lastName}: ${appointment.date}${appointment.treatment}\n"
+                    }
                 }
             }
+            listOfScheduledAppointments
         }
-        listOfScheduledAppointments
+    @Throws(Exception::class)
+    fun load() {
+        clients = serializer.read() as ArrayList<Client>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(clients)
     }
 
 }
