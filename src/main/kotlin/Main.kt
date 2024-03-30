@@ -115,3 +115,14 @@ fun runAppointmentMenu() {
         }
     } while (true)
 }
+fun runSearchingMenu() {
+    do {
+        val option = searchingMenu()
+
+        when (option) {
+            in 7..14, in 19..24 -> processSearchingMenuOption(option)
+            0 -> return  // Return to the main menu
+            else -> println("Invalid menu choice: $option")
+        }
+    } while (true)
+}
