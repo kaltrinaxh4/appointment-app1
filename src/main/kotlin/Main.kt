@@ -291,3 +291,18 @@ fun updateAppointmentForClient(isScheduled: Boolean){
     }
 }
 
+fun deleteClient()
+{
+    listClients()
+    if (clientAPI.numberOfClients() > 0) {
+
+        val id = readNextInt("Enter the id of the client to delete: ")
+
+        val clientToDelete = clientAPI.deleteClient(id)
+        if (clientToDelete) {
+            println("Delete Successful!")
+        } else {
+            println("Delete NOT Successful")
+        }
+    }
+}
