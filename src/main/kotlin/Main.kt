@@ -5,3 +5,5 @@ import persistence.XMLSerializer
 import java.io.File
 
 private val clientAPI = ClientAPI(XMLSerializer(File("notes.xml")))
+
+fun main() = runMenu()
