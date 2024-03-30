@@ -43,8 +43,8 @@ fun runClientMenu() {
 
         when (option) {
             in 1..6 -> processClientMenuOption(option)
-            25 -> load()
-            26 -> save()
+            23 -> load()
+            24 -> save()
             0 -> return  // Return to the main menu
             else -> println("Invalid menu choice: $option")
         }
@@ -80,8 +80,8 @@ fun clientMenu(): Int {
         > 5) Clear all clients from the system 
         > 6) Check if there are clients in the system 
         > -----------------------------------------------------
-        > 25) Load clients
-        > 26) Save clients 
+        > 23) Load clients
+        > 24) Save clients 
         > 0) Back to main menu
         > ----------------------------------------------------- 
         > ==>> """.trimMargin(">"))
@@ -130,10 +130,10 @@ fun appointmentMenu(): Int {
     println(""" 
         >-----------------------------------------------------
         > APPOINTMENT MENU
-        > 15) Add an appointment 
-        > 16) List confirmed appointments 
-        > 17) Update an appointment 
-        > 18) Delete an appointment 
+        > 13) Add an appointment 
+        > 14) List confirmed appointments 
+        > 15) Update an appointment 
+        > 16) Delete an appointment 
         > -----------------------------------------------------  
      
         > 0) Back to main menu
@@ -150,19 +150,17 @@ fun searchingMenu(): Int {
         > 7) Search for a client by their Id
         > 8) Search for a client by their first name 
         > 9) Search for a client by their last name 
-        > 10) Search for a client by their street 
-        > 11) Search for a client by their county 
-        > 12) Search for a client by their email 
-        > 13) Search for a client by their phone number 
-        > 14) Search for a client by their allergy 
+        > 10) Search for a client by their address 
+        > 11) Search for a client by their email 
+        > 12) Search for a client by their phone number 
         > ----------------------------------------------------- 
         > APPOINTMENT SEARCH MENU
-        > 19) Search for an appointment by its Id 
-        > 20) Search for an appointment by its time 
-        > 21) Search for an appointment by its date 
-        > 22) Search for an appointment by its treatments 
-        > 23) Search for an appointment by its cost 
-        > 24) Search for an appointment by its rating 
+        > 17) Search for an appointment by its Id 
+        > 18) Search for an appointment by its time 
+        > 19) Search for an appointment by its date 
+        > 20) Search for an appointment by its treatments 
+        > 21) Search for an appointment by its cost 
+        > 22) Search for an appointment by its rating 
         > ----------------------------------------------------- 
         > 0) Back to main menu
         > ----------------------------------------------------- 
@@ -170,4 +168,20 @@ fun searchingMenu(): Int {
 
     print("Enter your choice: ")
     return readLine()?.toIntOrNull() ?: -1
+}
+fun processAppointmentMenuOption(option: Int) {
+    when (option) {
+        15 -> {
+            val isConfirmedUserInput = readBooleanFromUserInputOfAppointmentConfirmationStatus()
+            addAppointmentForClient(isConfirmedUserInput)
+        }
+        16 -> listConfirmedAppointments()
+        17 -> {
+            val isConfirmedUserInput = readBooleanFromUserInputOfAppointmentConfirmationStatus()
+            updateAppointmentForClient(isConfirmedUserInput)
+        }
+        18 -> deleteAnAppointmentForAClient()
+
+        else -> println("Invalid menu choice: $option")
+    }
 }
