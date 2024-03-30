@@ -29,3 +29,16 @@ fun readCategoryChoice(): Int {
     print("Enter your choice: ")
     return readLine()?.toIntOrNull() ?: -1
 }
+fun runClientMenu() {
+    do {
+        val option = clientMenu()
+
+        when (option) {
+            in 1..6 -> processClientMenuOption(option)
+            25 -> load()
+            26 -> save()
+            0 -> return  // Return to the main menu
+            else -> println("Invalid menu choice: $option")
+        }
+    } while (true)
+}
