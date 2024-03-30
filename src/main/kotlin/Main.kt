@@ -126,3 +126,20 @@ fun runSearchingMenu() {
         }
     } while (true)
 }
+fun appointmentMenu(): Int {
+    println(""" 
+        >-----------------------------------------------------
+        > APPOINTMENT MENU
+        > 15) Add an appointment 
+        > 16) List confirmed appointments 
+        > 17) Update an appointment 
+        > 18) Delete an appointment 
+        > -----------------------------------------------------  
+     
+        > 0) Back to main menu
+        > ----------------------------------------------------- 
+        > ==>> """.trimMargin(">"))
+
+    print("Enter your choice: ")
+    return readLine()?.toIntOrNull() ?: -1
+}
