@@ -475,5 +475,50 @@ fun searchAppointmentsByReview()
     }
 }
 
+fun checkIfThereAreClients() = println(clientAPI.checkIfThereAreClients())
 
-
+fun exitApp()
+{
+    println("Exiting...bye")
+    exitProcess(0)
+}
+fun readBooleanFromUserInputOfClientPaymentStatus(): Boolean
+{
+    while (true)
+    {
+        val input = readNextLine("Enter true or false to indicate whether the client has paid or not: ")
+        if (input.equals("true", ignoreCase = true)) {
+            return true
+        } else if (input.equals("false", ignoreCase = true)) {
+            return false
+        } else
+        {
+            println("Invalid input. Please enter 'true' or 'false'.")
+        }
+    }
+}
+fun readBooleanFromUserInputOfAppointmentConfirmationStatus(): Boolean
+{
+    while (true)
+    {
+        val input = readNextLine("Enter true or false to indicate whether the appointment is confirmed or not: ")
+        if (input.equals("true", ignoreCase = true)) {
+            return true
+        } else if (input.equals("false", ignoreCase = true)) {
+            return false
+        } else
+        {
+            println("Invalid input. Please enter 'true' or 'false'.")
+        }
+    }
+}
+private fun askUserToChooseAppointment(Client: Client): Appointment?
+{
+    if (Client.numberOfAppointments() > 0) {
+        print(Client.listAppointments())
+        return Client.findAppointmentById(readNextInt("\nEnter the id of the item: "))
+    } else {
+        println("No items for chosen note")
+        return null
+    }
+}
