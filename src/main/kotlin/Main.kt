@@ -6,6 +6,9 @@ import models.Client
 import persistence.XMLSerializer
 import utils.ScannerInput
 import utils.ValidateInput
+import utils.ValidateInput.readValidCategory
+import utils.ValidateInput.readValidDateofAppointment
+import utils.ValidateInput.readValidReview
 
 
 import java.io.File
@@ -190,5 +193,20 @@ fun processSearchingMenuOption(option: Int) {
         in 7..14 -> processClientMenuOption(option) // Reusing processClientMenuOption for client search options
         in 19..24 -> processAppointmentMenuOption(option) // Reusing processAppointmentMenuOption for appointment search options
         else -> println("Invalid menu choice: $option")
+    }
+}
+
+fun addAppointmentForClient(isScheduled: Boolean) {
+    val client: Client
+        if (client.addAppointment(Appointment(
+                time = ValidateInput.readValidTime("\t Appointment Time, in the form 09.00: "),
+                date = readValidDateofAppointment("\t Appointment Date: "),
+                treatment = readValidCategory("\t Appointment Services: "),
+               price = ScannerInput.readNextInt("\t Appointment Cost:"),
+                isScheduled = isScheduled,
+                review = readValidReview("\t Appointment review:")
+            )))
+            println("Add is Complete!")
+        else println("Add is Not Complete")
     }
 }
