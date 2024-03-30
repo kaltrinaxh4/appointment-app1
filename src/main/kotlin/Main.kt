@@ -268,3 +268,26 @@ fun updateClient() {
         }
     }
 }
+fun updateAppointmentForClient(isScheduled: Boolean){
+    val client: Client? = clientAPI.findClientById(id) // Assuming clientAPI is accessible
+    if (client != null) {
+        val appointment: Appointment? = askUserToChooseAppointment(client)
+        if (appointment != null) {
+            val newTime = ScannerInput.readNextDouble("Enter a new appointment time: ")
+            val newDateOfA = readValidDateofAppointment("Enter a new appointment date: ")
+            val newCategory = readValidCategory("Enter the services that the new appointment will provide: ")
+            val newPrice = readNextInt("Enter a new appointment price: ")
+            val isItScheduled = isScheduled
+            val newReview = readValidReview("Enter a new review: ")
+            if (client.updateAppointment(appointment.appointmentId, Appointment(time = newTime, date = newDateOfA,
+                    treatment = newCategory, price = newPrice, isScheduled = isItScheduled, review = newReview))) {
+                println("Appointment Details updated successfully")
+            } else {
+                println("Appointment Details not updated")
+            }
+        } else {
+            println("Invalid Appointment Id")
+        }
+    }
+}
+
