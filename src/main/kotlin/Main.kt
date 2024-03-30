@@ -185,3 +185,10 @@ fun processAppointmentMenuOption(option: Int) {
         else -> println("Invalid menu choice: $option")
     }
 }
+fun processSearchingMenuOption(option: Int) {
+    when (option) {
+        in 7..14 -> processClientMenuOption(option) // Reusing processClientMenuOption for client search options
+        in 19..24 -> processAppointmentMenuOption(option) // Reusing processAppointmentMenuOption for appointment search options
+        else -> println("Invalid menu choice: $option")
+    }
+}
