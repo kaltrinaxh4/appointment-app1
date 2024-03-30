@@ -306,3 +306,18 @@ fun deleteClient()
         }
     }
 }
+fun deleteAnAppointmentForAClient() {
+    val client: Client? = clientAPI.findClientById(id) // Assuming clientAPI is accessible
+    if (client != null) {
+        val appointment: Appointment? = askUserToChooseAppointment(client)
+        if (appointment != null) {
+            val isDeleted = client.deleteAppointment(appointment.appointmentId)
+            if (isDeleted) {
+                println("Delete Successful!")
+            } else {
+                println("Delete NOT Successful")
+            }
+        }
+    }
+}
+
