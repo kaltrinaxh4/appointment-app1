@@ -1,6 +1,6 @@
 package utils
 
-import java.util.*
+import java.util.Scanner
 
 /**
  * This class provides methods for the robust handling of I/O using Scanner.
@@ -13,6 +13,7 @@ import java.util.*
  * @author Siobhan Drohan, Mairead Meagher
  * @since 1.0
  */
+
 object ScannerInput {
     /**
      * Read an int from the user.
