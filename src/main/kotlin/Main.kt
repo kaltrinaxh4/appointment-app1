@@ -4,16 +4,10 @@ import models.Appointment
 import models.Client
 
 import persistence.XMLSerializer
+import utils.ScannerInput
+import utils.ValidateInput
 
-import utils.ScannerInput.readNextDouble
-import utils.ScannerInput.readNextInt
-import utils.ScannerInput.readNextLine
-import utils.ValidateInput.readValidDate
-import utils.ValidateInput.readValidEmail
-import utils.ValidateInput.readValidPhone
-import utils.ValidateInput.readValidRating
-import utils.ValidateInput.readValidTime
-import utils.ValidateInput.readValidTreatment
+
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -94,4 +88,19 @@ fun clientMenu(): Int {
 
     print("Enter your choice: ")
     return readLine()?.toIntOrNull() ?: -1
+}
+
+fun addClient(hasPaid: Boolean) {
+    val firstName = ScannerInput.readNextLine("Enter the client's first name: ")
+    val lastName = ScannerInput.readNextLine("Enter the client's last name: ")
+    val address = ScannerInput.readNextLine("Enter the client's address: ")
+    val email = ScannerInput.readNextLine("Enter the client's email: ")
+    val phone = ValidateInput.readValidPhone("Enter the client's phone number: ")
+    val extraInfo = ScannerInput.readNextLine("Enter the client's allergies: ")
+    val isAdded = clientAPI.addClient(Client(firstName = firstName, lastName = lastName, street = street, county = county, email = email, phone = phone, allergy = allergy, hasPaid = hasPaid))
+    if (isAdded) {
+        println("Added Successfully")
+    } else {
+        println("Add Failed")
+    }
 }
