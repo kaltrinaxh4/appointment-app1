@@ -320,4 +320,160 @@ fun deleteAnAppointmentForAClient() {
         }
     }
 }
+fun clearAllClients()
+{
+    clientAPI.clearAllClients()
+    println( " All clients have been cleared from the system")
+}
+
+
+fun listClientsbyId()
+{
+    val searchResults = readNextInt("Enter the client's Id: ")
+    println(clientAPI.findClientById(searchResults))
+}
+
+
+fun searchClientsByFirstName()
+{
+    val searchQuery = readNextLine("Enter the client's first name: ")
+    val searchResults = clientAPI.searchClientByFirstName(searchQuery)
+    if (searchResults.isEmpty())
+    {
+        println("No clients found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+fun searchClientsByLastName()
+{
+    val searchQuery = readNextLine("Enter the client's last name: ")
+    val searchResults = clientAPI.searchClientByLastName(searchQuery)
+    if (searchResults.isEmpty())
+    {
+        println("No clients found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+fun searchClientsByAddress()
+{
+    val searchQuery = readNextLine("Enter the client's address: ")
+    val searchResults = clientAPI.searchClientByAddress(searchQuery)
+    if (searchResults.isEmpty())
+    {
+        println("No clients found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+
+
+fun searchClientsByEmail()
+{
+    val searchQuery = readNextLine("Enter the client's email: ")
+    val searchResults = clientAPI.searchClientByEmail(searchQuery)
+    if (searchResults.isEmpty())
+    {
+        println("No clients found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+
+fun searchClientsByPhone()
+{
+    val searchQuery = readNextInt("Enter the client's phone number: ")
+    val searchResults = clientAPI.searchClientByPhone(searchQuery)
+    if (searchResults.isEmpty())
+    {
+        println("No clients found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+
+fun searchAppointmentsById()
+{
+    val searchQuery = readNextInt("Enter the appointment's id: ")
+    val searchResults = clientAPI.searchAppointmentById(searchQuery)
+    if (searchResults.isEmpty())
+    {
+        println("No appointments found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+fun searchAppointmentsByTime()
+{
+    val searchQuery = ScannerInput.readNextDouble("Enter the time to search by: ")
+    val searchResults = clientAPI.searchAppointmentByTime(searchQuery)
+    if (searchResults.isEmpty()) {
+        println("No appointments found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+fun searchAppointmentsByDate()
+{
+    val searchQuery = readNextLine("Enter the date to search by: ")
+    val searchResults = clientAPI.searchAppointmentByDate(searchQuery)
+    if (searchResults.isEmpty()) {
+        println("No appointments found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+
+fun searchAppointmentsByCategory()
+{
+    val searchQuery = readNextLine("Enter the treatment to search by: ")
+    val searchResults = clientAPI.searchAppointmentByCategories(searchQuery)
+    if (searchResults.isEmpty()) {
+        println("No appointments found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun searchAppointmentsByPrice()
+{
+    val searchQuery = readNextInt("Enter the price to search by: ")
+    val searchResults = clientAPI.searchAppointmentByPrice(searchQuery)
+    if (searchResults.isEmpty()) {
+        println("No appointments found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
+fun searchAppointmentsByReview()
+{
+    val searchQuery = readNextInt("Enter the review to search by: ")
+    val searchResults = clientAPI.searchAppointmentByReview(searchQuery)
+    if (searchResults.isEmpty()) {
+        println("No appointments found")
+    } else {
+        println(searchResults)
+    }
+}
+
+
 
