@@ -522,3 +522,19 @@ private fun askUserToChooseAppointment(Client: Client): Appointment?
         return null
     }
 }
+fun save()
+{
+    try {
+        clientAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
+}
+fun load()
+{
+    try {
+        clientAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
+}
