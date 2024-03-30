@@ -232,3 +232,4 @@ fun listClients() {
         println("Option Invalid - No clients stored")
     }
 }
+fun listAllClients() = println(clientAPI.listAllClients())
