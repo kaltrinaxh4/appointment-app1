@@ -174,7 +174,7 @@ fun runSearchingMenu() {
         val option = searchingMenu()
 
         when (option) {
-            in 11..16 -> processSearchingMenuOption(option)
+            in 11..22 -> processSearchingMenuOption(option)
             0 -> return  // Return to the main menu
             else -> println("Invalid menu choice: $option")
         }
@@ -210,15 +210,25 @@ fun searchingMenu(): Int {
 
 fun processSearchingMenuOption(option: Int) {
     when (option) {
-        in 11..16 -> processClientMenuOption(option) // Reusing processClientMenuOption for client search options
-        in 17..22 -> processAppointmentMenuOption(option) // Reusing processAppointmentMenuOption for appointment search options
+        11 -> searchClientsById()
+        12 -> searchClientsByFirstName()
+        13 -> searchClientsByLastName()
+        14 -> searchClientsByAddress()
+        15 -> searchClientsByEmail()
+        16 -> searchClientsByPhone()
+        17 -> searchAppointmentsById()
+        18 -> searchAppointmentsByTime()
+        19 -> searchAppointmentsByDate()
+        20 -> searchAppointmentsByCategory()
+        21 -> searchAppointmentsByPrice()
+        22 -> searchAppointmentsByReview()
         else -> println("Invalid menu choice: $option")
     }
 }
 
 fun addAppointmentForClient(isScheduled: Boolean) {
     val clientId = readNextInt("Enter the ID of the client: ")
-    val client = clientAPI.findClientById(clientId)
+    val client = clientAPI.searchClientById(clientId)
     if (client != null) {
         val appointment = createAppointmentFromUserInput(isScheduled)
         if (appointment != null) {
@@ -283,7 +293,7 @@ fun updateClient() {
     if (clientAPI.numberOfClients() > 0) {
         // Only ask the user to choose the client if clients exist
         val id = readNextInt("Enter the id of the client to update: ")
-        if (clientAPI.findClientById(id) != null) {
+        if (clientAPI.searchClientById(id) != null) {
             val firstName = readNextLine("Enter the client's first name:  ")
             val lastName = readNextLine("Enter the client's last name:  ")
             val address = readNextLine("Enter the client's address:  ")
@@ -304,7 +314,7 @@ fun updateClient() {
 }
 
 fun updateAppointmentForClient(isScheduled: Boolean, id: Int) {
-    val client: Client? = clientAPI.findClientById(id)
+    val client: Client? = clientAPI.searchClientById(id)
     if (client != null) {
         val appointment: Appointment? = askUserToChooseAppointment(client)
         if (appointment != null) {
@@ -343,7 +353,7 @@ fun deleteClient()
     }
 }
 fun deleteAnAppointmentForAClient(id: Int) {
-    val client: Client? = clientAPI.findClientById(id)
+    val client: Client? = clientAPI.searchClientById(id)
     if (client != null) {
         val appointment: Appointment? = askUserToChooseAppointment(client)
         if (appointment != null) {
@@ -367,7 +377,7 @@ fun clearAllClients()
 fun listClientsbyId()
 {
     val searchResults = readNextInt("Enter the client's Id: ")
-    println(clientAPI.findClientById(searchResults))
+    println(clientAPI.searchClientById(searchResults))
 }
 
 
@@ -438,7 +448,15 @@ fun searchClientsByPhone()
     }
 }
 
-
+fun searchClientsById() {
+    val clientId = readNextInt("Enter the client's ID: ")
+    val client = clientAPI.searchClientById(clientId)
+    if (client != null) {
+        println("Client found: $client")
+    } else {
+        println("Client not found with ID: $clientId")
+    }
+}
 
 fun searchAppointmentsById()
 {
