@@ -1,7 +1,9 @@
 package persistence
 
 /**
- * 1. Imports XStream and XML library
+ * XMLSerializer is responsible for serializing and deserializing objects to/from XML format.
+ *
+ * @property file The file to read from or write to.
  */
 import com.thoughtworks.xstream.XStream
 import com.thoughtworks.xstream.io.xml.DomDriver
@@ -11,9 +13,14 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class XMLSerializer(private val file: File) : Serializer
-{
+class XMLSerializer(private val file: File) : Serializer {
 
+    /**
+     * Reads serialized data from the file and deserializes it.
+     *
+     * @return The deserialized object.
+     * @throws Exception if an error occurs during reading or deserialization.
+     */
     @Throws(Exception::class)
     override fun read(): Any {
         val xStream = XStream(DomDriver())
@@ -25,7 +32,12 @@ class XMLSerializer(private val file: File) : Serializer
         return obj
     }
 
-
+    /**
+     * Serializes the provided object and writes it to the file.
+     *
+     * @param obj The object to serialize and write.
+     * @throws Exception if an error occurs during serialization or writing.
+     */
     @Throws(Exception::class)
     override fun write(obj: Any?) {
         val xStream = XStream(DomDriver())
@@ -33,6 +45,4 @@ class XMLSerializer(private val file: File) : Serializer
         outputStream.writeObject(obj)
         outputStream.close()
     }
-
-
 }

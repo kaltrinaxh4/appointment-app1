@@ -3,7 +3,18 @@ package utils
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+
+/**
+ * DateofAppointmentUtility provides utility methods related to date validation for appointments.
+ */
 object DateofAppointmentUtility {
+
+    /**
+     * Checks if the provided date string is in a correct format.
+     *
+     * @param dateToCheck The date string to check.
+     * @return true if the date string is correct, false otherwise.
+     */
     @JvmStatic
     fun isDateCorrect(dateToCheck: String?): Boolean {
         val dateFormatter1 = DateTimeFormatter.ofPattern("d/MM/yyyy")
