@@ -202,7 +202,7 @@ class ClientAPITest {
         }
 
         @Nested
-        inner class SearchClients {
+        inner class SearchAppointments {
             @Test
             fun `searchAppointmentByDate should return appointments for given date`() {
                 val result = populatedClients?.searchAppointmentByDate("15/12/2023")
