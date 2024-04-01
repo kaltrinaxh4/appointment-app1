@@ -11,10 +11,11 @@ import java.io.File
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import persistence.JSONSerializer
 
 class ClientAPITest {
 
-    private var joan: Client? = null
+    private var Kylie: Client? = null
     private var mark: Client? = null
     private var emma: Client? = null
     private var david: Client? = null
@@ -34,7 +35,7 @@ class ClientAPITest {
         val appointmentFour = Appointment(3, "15/12/2023", 14.00, "KeratinTreatment", 25, 2, true)
         val appointmentFive = Appointment(4, "15/12/2023", 15.00, "HairPerm", 50, 5, true)
 
-        joan = Client(
+        Kylie = Client(
             0,
             "Joan",
             "Smith",
@@ -85,7 +86,7 @@ class ClientAPITest {
             mutableSetOf(appointmentFive)
         )
 
-        populatedClients?.addClient(joan!!)
+        populatedClients?.addClient(Kylie!!)
         populatedClients?.addClient(mark!!)
         populatedClients?.addClient(emma!!)
         populatedClients?.addClient(david!!)
@@ -94,7 +95,7 @@ class ClientAPITest {
 
     @AfterEach
     fun tearDown() {
-        joan = null
+        Kylie = null
         mark = null
         emma = null
         david = null
@@ -130,7 +131,7 @@ class ClientAPITest {
         @Test
         fun `searching client by id should return correct client`() {
             val result = populatedClients?.searchClientById(0)
-            assertEquals(joan, result)
+            assertEquals(Kylie, result)
         }
 
         @Test
@@ -153,7 +154,7 @@ class ClientAPITest {
             fun `updating client information should return true`() {
                 val updatedClient = Client(
                     0,
-                    "Joan",
+                    "Kylie",
                     "Brown",
                     "1 High Street",
                     "joan@hotmail.com",
@@ -168,6 +169,7 @@ class ClientAPITest {
             @Nested
             inner class DeleteTests {
             }
+
             @Test
             fun `deleting an existing client should decrease the number of clients`() {
                 val initialCount = populatedClients?.numberOfClients() ?: 0
@@ -183,7 +185,122 @@ class ClientAPITest {
                 assertEquals(initialCount, populatedClients?.numberOfClients())
             }
 
+            @Test
+            fun `clearAllClients should remove all clients`() {
+                val initialSize = populatedClients!!.numberOfClients()
 
+                populatedClients!!.clearAllClients()
+
+                val finalSize = populatedClients!!.numberOfClients()
+
+                assertEquals(0, finalSize)
+                assertEquals(
+                    initialSize,
+                    finalSize + 5
+                )
+            }
         }
+
+        @Nested
+        inner class SearchClients {
+            @Test
+            fun `searchAppointmentByDate should return appointments for given date`() {
+                val result = populatedClients?.searchAppointmentByDate("15/12/2023")
+                assertTrue(result?.contains("Kylie Smith") ?: false)
+                assertTrue(result?.contains("Emma Brown") ?: false)
+                assertTrue(result?.contains("David Jones") ?: false)
+                assertTrue(result?.contains("Sophie Williams") ?: false)
+            }
+
+            @Test
+            fun `searchAppointmentByCategories should return appointments for given category`() {
+                val result = populatedClients?.searchAppointmentByCategories("Hairdye")
+                assertTrue(result?.contains("Emma Brown") ?: false)
+            }
+
+            @Test
+            fun `searchAppointmentByPrice should return appointments for given price`() {
+                val result = populatedClients?.searchAppointmentByPrice(25)
+                assertTrue(result?.contains("David Jones") ?: false)
+            }
+
+            @Test
+            fun `searchAppointmentByReview should return appointments for given review`() {
+                val result = populatedClients?.searchAppointmentByReview(5)
+                assertTrue(result?.contains("Mark Taylor") ?: false)
+                assertTrue(result?.contains("Sophie Williams") ?: false)
+            }
+
+            @Test
+            fun `searchAppointmentByTime should return appointments for given time`() {
+                val result = populatedClients?.searchAppointmentByTime(11.0)
+                assertTrue(result?.contains("Mark Taylor") ?: false)
+            }
+        }
+
+        @Test
+        fun `listScheduledAppointments should return all scheduled appointments`() {
+            val result = populatedClients?.listScheduledAppointments()
+            assertTrue(result?.contains("Kylie Smith") ?: false)
+            assertTrue(result?.contains("Mark Taylor") ?: false)
+            assertTrue(result?.contains("Sophie Williams") ?: false)
+        }
+
+
+        @Test
+        fun `checkIfThereAreClients should return appropriate message when there are clients`() {
+            val result = populatedClients?.checkIfThereAreClients()
+            assertEquals("Currently there are clients stored", result ?: "")
+        }
+
+        @Test
+        fun `checkIfThereAreClients should return appropriate message when there are no clients`() {
+            populatedClients?.clearAllClients()
+            val result = populatedClients?.checkIfThereAreClients()
+            assertEquals("Currently there are no clients stored", result ?: "")
+        }
+
+    }
+    @Nested
+    inner class PersistenceTests {
+
+        @Test
+        fun `saving and loading an empty collection in XML doesn't crash app`() {
+            // Saving an empty clients.XML file.
+            val storingClients = ClientAPI(XMLSerializer(File("clients.xml")))
+            storingClients.store()
+
+            //Loading the empty notes.xml file into a new object
+            val loadedClients = ClientAPI(XMLSerializer(File("clients.xml")))
+            loadedClients.load()
+
+            //Comparing the source of the notes (storingNotes) with the XML loaded notes (loadedNotes)
+            assertEquals(0, storingClients.numberOfClients())
+            assertEquals(0, loadedClients.numberOfClients())
+            assertEquals(storingClients.numberOfClients(), loadedClients.numberOfClients())
+        }
+
+
+        @Test
+        fun `saving and loading an empty collection in JSON doesn't crash app`() {
+            // Saving an empty notes.json file.
+            val storingClients = ClientAPI(JSONSerializer(File("clients.json")))
+            storingClients.store()
+
+            //Loading the empty notes.json file into a new object
+            val loadedClients = ClientAPI(JSONSerializer(File("clients.json")))
+            loadedClients.load()
+
+            //Comparing the source of the notes (storingNotes) with the json loaded notes (loadedNotes)
+            assertEquals(0, storingClients.numberOfClients())
+            assertEquals(0, loadedClients.numberOfClients())
+            assertEquals(storingClients.numberOfClients(), loadedClients.numberOfClients())
+        }
+
+
     }
 }
+
+
+
+
