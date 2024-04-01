@@ -14,12 +14,16 @@ import utils.ValidateInput.readValidCategory
 import java.io.File
 import kotlin.system.exitProcess
 
-
+/**
+ * Main function to run the application.
+ */
 private val clientAPI = ClientAPI(XMLSerializer(File("clients.xml")))
 
 fun main() = runMenu()
 
-
+/**
+ * Function to display and handle the main menu.
+ */
 fun runMenu() {
     do {
         val categoryChoice = readCategoryChoice()
@@ -34,6 +38,9 @@ fun runMenu() {
     } while (true)
 }
 
+/**
+ * Function to read the user's choice of category from the main menu.
+ */
 fun readCategoryChoice(): Int {
     println("\n-----------------------------------------------------")
     println("\u001B[35m             Select a category:\u001B[0m") // Pink color code
@@ -48,6 +55,9 @@ fun readCategoryChoice(): Int {
     return readLine()?.toIntOrNull() ?: -1
 }
 
+/**
+ * Function to handle the client menu options.
+ */
 fun runClientMenu() {
     do {
         val option = clientMenu()
@@ -62,6 +72,9 @@ fun runClientMenu() {
     } while (true)
 }
 
+/**
+ * Function to process the client menu option chosen by the user.
+ */
 fun processClientMenuOption(option: Int) {
     when (option) {
         1 -> addClient()
@@ -74,6 +87,9 @@ fun processClientMenuOption(option: Int) {
     }
 }
 
+/**
+ * Function to display and handle the client menu.
+ */
 fun clientMenu(): Int {
     println(""" 
         >-----------------------------------------------------
@@ -97,6 +113,9 @@ fun clientMenu(): Int {
     return readLine()?.toIntOrNull() ?: -1
 }
 
+/**
+ * Function to add a new client.
+ */
 fun addClient() {
     val firstName = ScannerInput.readNextLine("Enter the client's first name: ")
     val lastName = ScannerInput.readNextLine("Enter the client's last name: ")
@@ -112,6 +131,9 @@ fun addClient() {
     }
 }
 
+/**
+ * Runs the appointment menu, allowing users to perform various operations related to appointments.
+ */
 fun runAppointmentMenu() {
     do {
         val option = appointmentMenu()
@@ -123,6 +145,11 @@ fun runAppointmentMenu() {
         }
     } while (true)
 }
+
+/**
+ * Processes the selected option from the appointment menu.
+ * @param option The selected option from the menu.
+ */
 fun processAppointmentMenuOption(option: Int) {
     when (option) {
         7 -> addAppointment()
@@ -133,6 +160,10 @@ fun processAppointmentMenuOption(option: Int) {
     }
 }
 
+/**
+ * Displays the appointment menu and prompts the user for input.
+ * @return The user's menu choice.
+ */
 fun appointmentMenu(): Int {
     println(""" 
         >-----------------------------------------------------
@@ -150,24 +181,35 @@ fun appointmentMenu(): Int {
     print("\u001B[33mEnter your choice:\u001B[0m ")
     return readLine()?.toIntOrNull() ?: -1
 }
+
+/**
+ * Adds an appointment for a client.
+ */
 fun addAppointment() {
     val isScheduled = readBooleanFromUserInputOfAppointmentConfirmationStatus()
     addAppointmentForClient(isScheduled)
 }
 
-
-
+/**
+ * Updates an appointment for a client.
+ */
 fun updateAppointment() {
     val isScheduled = readBooleanFromUserInputOfAppointmentConfirmationStatus()
     val id = readNextInt("Enter the ID of the client: ")
     updateAppointmentForClient(isScheduled, id)
 }
 
+/**
+ * Deletes an appointment for a client.
+ */
 fun deleteAppointment() {
     val id = readNextInt("Enter the ID of the client: ")
     deleteAnAppointmentForAClient(id)
 }
 
+/**
+ * Runs the searching menu, allowing users to perform various search operations.
+ */
 fun runSearchingMenu() {
     do {
         val option = searchingMenu()
@@ -179,6 +221,11 @@ fun runSearchingMenu() {
         }
     } while (true)
 }
+
+/**
+ * Displays the searching menu and prompts the user for input.
+ * @return The user's menu choice.
+ */
 fun searchingMenu(): Int {
     println(""" 
         >-----------------------------------------------------
@@ -210,7 +257,10 @@ fun searchingMenu(): Int {
     return readLine()?.toIntOrNull() ?: -1
 }
 
-
+/**
+ * Processes the selected option from the searching menu.
+ * @param option The selected option from the menu.
+ */
 fun processSearchingMenuOption(option: Int) {
     when (option) {
         11 -> searchClientsById()
@@ -229,6 +279,10 @@ fun processSearchingMenuOption(option: Int) {
     }
 }
 
+/**
+ * Adds an appointment for a client.
+ * @param isScheduled Indicates whether the appointment is scheduled or not.
+ */
 fun addAppointmentForClient(isScheduled: Boolean) {
     val clientId = readNextInt("Enter the ID of the client: ")
     val client = clientAPI.searchClientById(clientId)
@@ -249,6 +303,11 @@ fun addAppointmentForClient(isScheduled: Boolean) {
     }
 }
 
+/**
+ * Creates an appointment from user input.
+ * @param isScheduled Indicates whether the appointment is scheduled or not.
+ * @return The created appointment.
+ */
 fun createAppointmentFromUserInput(isScheduled: Boolean): Appointment? {
     val time = ValidateInput.readValidTime("Enter the appointment time (in the form 09.00): ")
     val date = ValidateInput.readValidDateofAppointment("Enter the appointment date: ")
@@ -259,6 +318,9 @@ fun createAppointmentFromUserInput(isScheduled: Boolean): Appointment? {
     return Appointment(time = time, date = date, treatment = treatment, price = price, review = review, isScheduled = isScheduled)
 }
 
+/**
+ * Lists clients and provides options to view all clients or the number of clients.
+ */
 fun listClients() {
     if (clientAPI.numberOfClients() > 0) {
         val option = ScannerInput.readNextInt(
@@ -266,24 +328,32 @@ fun listClients() {
                   > --------------------------------
                   > 1) View ALL Clients 
                   > 2) List the NUMBER OF ALL Clients 
-              
                   > --------------------------------
-         > ==>> """.trimMargin(">")
-        )
+         > ==>> """.trimMargin(">"))
 
         when (option) {
             1 -> listAllClients()
             2 -> listNumberOfAllClients()
-
             else -> println("Invalid option entered: $option")
         }
     } else {
         println("Option Invalid - No clients stored")
     }
 }
+
+/**
+ * Lists all clients.
+ */
 fun listAllClients() = println(clientAPI.listAllClients())
+
+/**
+ * Lists the number of all clients.
+ */
 fun listNumberOfAllClients() = println(clientAPI.numberOfClients())
 
+/**
+ * Lists scheduled appointments.
+ */
 fun listScheduledAppointments(){
     if (clientAPI.listScheduledAppointments() > 0.toString()) {
         println("Total Scheduled Appointments: ${clientAPI.listScheduledAppointments()}")
@@ -291,6 +361,9 @@ fun listScheduledAppointments(){
     println(clientAPI.listScheduledAppointments())
 }
 
+/**
+ * Updates client information.
+ */
 fun updateClient() {
     listClients()
     if (clientAPI.numberOfClients() > 0) {
@@ -316,6 +389,9 @@ fun updateClient() {
     }
 }
 
+/**
+ * Updates appointment information for a client.
+ */
 fun updateAppointmentForClient(isScheduled: Boolean, id: Int) {
     val client: Client? = clientAPI.searchClientById(id)
     if (client != null) {
@@ -340,13 +416,14 @@ fun updateAppointmentForClient(isScheduled: Boolean, id: Int) {
 }
 
 
-fun deleteClient()
-{
+
+/**
+ * Deletes a client.
+ */
+fun deleteClient() {
     listClients()
     if (clientAPI.numberOfClients() > 0) {
-
         val id = readNextInt("Enter the id of the client to delete: ")
-
         val clientToDelete = clientAPI.deleteClient(id)
         if (clientToDelete) {
             println("Delete Successful!")
@@ -355,6 +432,10 @@ fun deleteClient()
         }
     }
 }
+
+/**
+ * Deletes an appointment for a client.
+ */
 fun deleteAnAppointmentForAClient(id: Int) {
     val client: Client? = clientAPI.searchClientById(id)
     if (client != null) {
@@ -370,81 +451,82 @@ fun deleteAnAppointmentForAClient(id: Int) {
     }
 }
 
-fun clearAllClients()
-{
+/**
+ * Clears all clients from the system.
+ */
+fun clearAllClients() {
     clientAPI.clearAllClients()
-    println( " All clients have been cleared from the system")
+    println("All clients have been cleared from the system")
 }
 
-
-
-fun searchClientsByFirstName()
-{
+/**
+ * Searches clients by first name.
+ */
+fun searchClientsByFirstName() {
     val searchQuery = readNextLine("Enter the client's first name: ")
     val searchResults = clientAPI.searchClientByFirstName(searchQuery)
-    if (searchResults.isEmpty())
-    {
+    if (searchResults.isEmpty()) {
         println("No clients found")
     } else {
         println(searchResults)
     }
 }
 
-
-fun searchClientsByLastName()
-{
+/**
+ * Searches clients by last name.
+ */
+fun searchClientsByLastName() {
     val searchQuery = readNextLine("Enter the client's last name: ")
     val searchResults = clientAPI.searchClientByLastName(searchQuery)
-    if (searchResults.isEmpty())
-    {
+    if (searchResults.isEmpty()) {
         println("No clients found")
     } else {
         println(searchResults)
     }
 }
 
-
-fun searchClientsByAddress()
-{
+/**
+ * Searches clients by address.
+ */
+fun searchClientsByAddress() {
     val searchQuery = readNextLine("Enter the client's address: ")
     val searchResults = clientAPI.searchClientByAddress(searchQuery)
-    if (searchResults.isEmpty())
-    {
+    if (searchResults.isEmpty()) {
         println("No clients found")
     } else {
         println(searchResults)
     }
 }
 
-
-
-
-fun searchClientsByEmail()
-{
+/**
+ * Searches clients by email.
+ */
+fun searchClientsByEmail() {
     val searchQuery = readNextLine("Enter the client's email: ")
     val searchResults = clientAPI.searchClientByEmail(searchQuery)
-    if (searchResults.isEmpty())
-    {
+    if (searchResults.isEmpty()) {
         println("No clients found")
     } else {
         println(searchResults)
     }
 }
 
-
-
-fun searchClientsByPhone()
-{
+/**
+ * Searches clients by phone.
+ */
+fun searchClientsByPhone() {
     val searchQuery = readNextInt("Enter the client's phone number: ")
     val searchResults = clientAPI.searchClientByPhone(searchQuery)
-    if (searchResults.isEmpty())
-    {
+    if (searchResults.isEmpty()) {
         println("No clients found")
     } else {
         println(searchResults)
     }
 }
 
+/**
+ * Searches clients by ID.
+ */
 fun searchClientsById() {
     val clientId = readNextInt("Enter the client's ID: ")
     val client = clientAPI.searchClientById(clientId)
@@ -454,20 +536,22 @@ fun searchClientsById() {
         println("Client not found with ID: $clientId")
     }
 }
-
-fun searchAppointmentsById()
-{
+/**
+ * Searches appointments by ID.
+ */
+fun searchAppointmentsById() {
     val searchQuery = readNextInt("Enter the appointment's id: ")
     val searchResults = clientAPI.searchAppointmentById(searchQuery)
-    if (searchResults.isEmpty())
-    {
+    if (searchResults.isEmpty()) {
         println("No appointments found")
     } else {
         println(searchResults)
     }
 }
 
-
+/**
+ * Searches appointments by time.
+ */
 fun searchAppointmentsByTime()
 {
     val searchQuery = ScannerInput.readNextDouble("Enter the time: ")
@@ -479,9 +563,10 @@ fun searchAppointmentsByTime()
     }
 }
 
-
-fun searchAppointmentsByDate()
-{
+/**
+ * Searches appointments by date.
+ */
+fun searchAppointmentsByDate() {
     val searchQuery = readNextLine("Enter the date: ")
     val searchResults = clientAPI.searchAppointmentByDate(searchQuery)
     if (searchResults.isEmpty()) {
@@ -491,10 +576,10 @@ fun searchAppointmentsByDate()
     }
 }
 
-
-
-fun searchAppointmentsByCategory()
-{
+/**
+ * Searches appointments by category.
+ */
+fun searchAppointmentsByCategory() {
     val searchQuery = readNextLine("Enter the category of treatment: ")
     val searchResults = clientAPI.searchAppointmentByCategories(searchQuery)
     if (searchResults.isEmpty()) {
@@ -504,8 +589,10 @@ fun searchAppointmentsByCategory()
     }
 }
 
-fun searchAppointmentsByPrice()
-{
+/**
+ * Searches appointments by price.
+ */
+fun searchAppointmentsByPrice() {
     val searchQuery = readNextInt("Enter the price: ")
     val searchResults = clientAPI.searchAppointmentByPrice(searchQuery)
     if (searchResults.isEmpty()) {
@@ -515,9 +602,10 @@ fun searchAppointmentsByPrice()
     }
 }
 
-
-fun searchAppointmentsByReview()
-{
+/**
+ * Searches appointments by review.
+ */
+fun searchAppointmentsByReview() {
     val searchQuery = readNextInt("Enter the review: ")
     val searchResults = clientAPI.searchAppointmentByReview(searchQuery)
     if (searchResults.isEmpty()) {
@@ -527,31 +615,42 @@ fun searchAppointmentsByReview()
     }
 }
 
-fun checkIfThereAreClients() = println(clientAPI.checkIfThereAreClients())
 
-fun exitApp()
-{
+/**
+ * Checks if there are clients.
+ */
+fun checkIfThereAreClients() {
+    println(clientAPI.checkIfThereAreClients())
+}
+
+/**
+ * Exits the application.
+ */
+fun exitApp() {
     println("Exiting...bye")
     exitProcess(0)
 }
 
-fun readBooleanFromUserInputOfAppointmentConfirmationStatus(): Boolean
-{
-    while (true)
-    {
+/**
+ * Reads boolean from user input of appointment confirmation status.
+ */
+fun readBooleanFromUserInputOfAppointmentConfirmationStatus(): Boolean {
+    while (true) {
         val input = readNextLine("Enter yes or no to confirm whether the appointment is Scheduled or not: ")
         if (input.equals("yes", ignoreCase = true)) {
             return true
         } else if (input.equals("no", ignoreCase = true)) {
             return false
-        } else
-        {
+        } else {
             println("Invalid input. Please enter 'yes' or 'no'.")
         }
     }
 }
-private fun askUserToChooseAppointment(Client: Client): Appointment?
-{
+
+/**
+ * Asks the user to choose an appointment for a client.
+ */
+private fun askUserToChooseAppointment(Client: Client): Appointment? {
     if (Client.numberOfAppointments() > 0) {
         print(Client.listAppointments())
         return Client.findAppointmentById(readNextInt("\nEnter the id of the item: "))
@@ -560,16 +659,22 @@ private fun askUserToChooseAppointment(Client: Client): Appointment?
         return null
     }
 }
-fun save()
-{
+
+/**
+ * Saves client data.
+ */
+fun save() {
     try {
         clientAPI.store()
     } catch (e: Exception) {
         System.err.println("Error writing to file: $e")
     }
 }
-fun load()
-{
+
+/**
+ * Loads client data.
+ */
+fun load() {
     try {
         clientAPI.load()
     } catch (e: Exception) {
