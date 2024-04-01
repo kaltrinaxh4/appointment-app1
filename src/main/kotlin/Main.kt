@@ -30,17 +30,21 @@ fun runMenu() {
             2 -> runAppointmentMenu()
             3 -> runSearchingMenu()
             0 -> exitApp()
-            else -> println("Invalid menu choice: $categoryChoice")
+            else -> println("\u001B[35mInvalid menu choice: $categoryChoice\u001B[0m") // Pink color code
         }
     } while (true)
 }
 
 fun readCategoryChoice(): Int {
-    println("Select a category:")
+    println("---------------------")
+    println("\u001B[35mSelect a category:\u001B[0m") // Pink color code
+    println("---------------------")
     println("1. Client Menu")
     println("2. Appointment Menu")
     println("3. Searching Menu")
+    println("---------------------")
     println("0. Exit")
+    println("---------------------")
     print("Enter your choice: ")
     return readLine()?.toIntOrNull() ?: -1
 }
@@ -136,6 +140,7 @@ fun appointmentMenu(): Int {
     println(""" 
         >-----------------------------------------------------
         > APPOINTMENT MENU
+        > ----------------------------------------------------
         > 7) Add an appointment 
         > 8) List confirmed appointments 
         > 9) Update an appointment 
@@ -185,14 +190,17 @@ fun searchingMenu(): Int {
     println(""" 
         >-----------------------------------------------------
         > CLIENT SEARCH MENU 
+        > ----------------------------------------------------
         > 11) Search for a client by their Id
         > 12) Search for a client by their first name 
         > 13) Search for a client by their last name 
         > 14) Search for a client by their address 
         > 15) Search for a client by their email 
         > 16) Search for a client by their phone number 
+        
         > ----------------------------------------------------- 
         > APPOINTMENT SEARCH MENU
+        > -----------------------------------------------------
         > 17) Search for an appointment by its Id 
         > 18) Search for an appointment by its time 
         > 19) Search for an appointment by its date 
@@ -473,7 +481,7 @@ fun searchAppointmentsById()
 
 fun searchAppointmentsByTime()
 {
-    val searchQuery = ScannerInput.readNextDouble("Enter the time to search by: ")
+    val searchQuery = ScannerInput.readNextDouble("Enter the time: ")
     val searchResults = clientAPI.searchAppointmentByTime(searchQuery)
     if (searchResults.isEmpty()) {
         println("No appointments found")
@@ -485,7 +493,7 @@ fun searchAppointmentsByTime()
 
 fun searchAppointmentsByDate()
 {
-    val searchQuery = readNextLine("Enter the date to search by: ")
+    val searchQuery = readNextLine("Enter the date: ")
     val searchResults = clientAPI.searchAppointmentByDate(searchQuery)
     if (searchResults.isEmpty()) {
         println("No appointments found")
@@ -498,7 +506,7 @@ fun searchAppointmentsByDate()
 
 fun searchAppointmentsByCategory()
 {
-    val searchQuery = readNextLine("Enter the treatment to search by: ")
+    val searchQuery = readNextLine("Enter the category of treatment: ")
     val searchResults = clientAPI.searchAppointmentByCategories(searchQuery)
     if (searchResults.isEmpty()) {
         println("No appointments found")
@@ -509,7 +517,7 @@ fun searchAppointmentsByCategory()
 
 fun searchAppointmentsByPrice()
 {
-    val searchQuery = readNextInt("Enter the price to search by: ")
+    val searchQuery = readNextInt("Enter the price: ")
     val searchResults = clientAPI.searchAppointmentByPrice(searchQuery)
     if (searchResults.isEmpty()) {
         println("No appointments found")
@@ -521,7 +529,7 @@ fun searchAppointmentsByPrice()
 
 fun searchAppointmentsByReview()
 {
-    val searchQuery = readNextInt("Enter the review to search by: ")
+    val searchQuery = readNextInt("Enter the review: ")
     val searchResults = clientAPI.searchAppointmentByReview(searchQuery)
     if (searchResults.isEmpty()) {
         println("No appointments found")
@@ -542,14 +550,14 @@ fun readBooleanFromUserInputOfAppointmentConfirmationStatus(): Boolean
 {
     while (true)
     {
-        val input = readNextLine("Enter true or false to indicate whether the appointment is Scheduled or not: ")
-        if (input.equals("true", ignoreCase = true)) {
+        val input = readNextLine("Enter yes or no to confirm whether the appointment is Scheduled or not: ")
+        if (input.equals("yes", ignoreCase = true)) {
             return true
-        } else if (input.equals("false", ignoreCase = true)) {
+        } else if (input.equals("no", ignoreCase = true)) {
             return false
         } else
         {
-            println("Invalid input. Please enter 'true' or 'false'.")
+            println("Invalid input. Please enter 'yes' or 'no'.")
         }
     }
 }
