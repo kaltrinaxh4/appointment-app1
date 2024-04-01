@@ -21,6 +21,7 @@ private val clientAPI = ClientAPI(XMLSerializer(File("notes.xml")))
 
 fun main() = runMenu()
 
+
 fun runMenu() {
     do {
         val categoryChoice = readCategoryChoice()
@@ -36,16 +37,16 @@ fun runMenu() {
 }
 
 fun readCategoryChoice(): Int {
-    println("---------------------")
-    println("\u001B[35mSelect a category:\u001B[0m") // Pink color code
-    println("---------------------")
-    println("1. Client Menu")
-    println("2. Appointment Menu")
-    println("3. Searching Menu")
-    println("---------------------")
-    println("0. Exit")
-    println("---------------------")
-    print("Enter your choice: ")
+    println("\n-----------------------------------------------------")
+    println("\u001B[35m             Select a category:\u001B[0m") // Pink color code
+    println("-----------------------------------------------------")
+    println("\u001B[94m1. Client Menu\u001B[0m") // Baby blue color code (94)
+    println("\u001B[94m2. Appointment Menu\u001B[0m") // Baby blue color code (94)
+    println("\u001B[94m3. Searching Menu\u001B[0m") // Baby blue color code (94)
+    println("-----------------------------------------------------")
+    println("\u001B[94m0. Exit\u001B[0m") // Baby blue color code (94)
+    println("-----------------------------------------------------")
+    print("\u001B[33mEnter your choice:\u001B[0m ")
     return readLine()?.toIntOrNull() ?: -1
 }
 
@@ -58,7 +59,7 @@ fun runClientMenu() {
             23 -> load()
             24 -> save()
             0 -> return  // Return to the main menu
-            else -> println("Invalid menu choice: $option")
+            else -> println("Invalid menu choice: ")
         }
     } while (true)
 }
@@ -85,9 +86,8 @@ fun clientMenu(): Int {
         > 2) List clients 
         > 3) Update a client 
         > 4) Delete a client 
-        > 5) Check if there are clients stored in the system
-        > 6) Clear all clients from the data system 
-       1
+        > 5) Check if there are clients stored 
+        > 6) Clear all clients
         > -----------------------------------------------------
         > 23) Load clients
         > 24) Save clients 
@@ -121,11 +121,10 @@ fun runAppointmentMenu() {
         when (option) {
             in 7..10 -> processAppointmentMenuOption(option)
             0 -> return  // Return to the main menu
-            else -> println("Invalid menu choice: $option")
+            else -> println("Invalid menu choice: ")
         }
     } while (true)
 }
-
 fun processAppointmentMenuOption(option: Int) {
     when (option) {
         7 -> addAppointment()
@@ -150,10 +149,9 @@ fun appointmentMenu(): Int {
         > ----------------------------------------------------- 
         > ==>> """.trimMargin(">"))
 
-    print("Enter your choice: ")
+    print("\u001B[33mEnter your choice:\u001B[0m ")
     return readLine()?.toIntOrNull() ?: -1
 }
-
 fun addAppointment() {
     val isScheduled = readBooleanFromUserInputOfAppointmentConfirmationStatus()
     addAppointmentForClient(isScheduled)
@@ -181,14 +179,15 @@ fun runSearchingMenu() {
         when (option) {
             in 11..22 -> processSearchingMenuOption(option)
             0 -> return  // Return to the main menu
-            else -> println("Invalid menu choice: $option")
+            else -> println("Invalid menu choice:")
         }
     } while (true)
 }
-
 fun searchingMenu(): Int {
     println(""" 
         >-----------------------------------------------------
+        > SEARCH MENU
+        > ----------------------------------------------------
         > CLIENT SEARCH MENU 
         > ----------------------------------------------------
         > 11) Search for a client by their Id
@@ -197,7 +196,6 @@ fun searchingMenu(): Int {
         > 14) Search for a client by their address 
         > 15) Search for a client by their email 
         > 16) Search for a client by their phone number 
-        
         > ----------------------------------------------------- 
         > APPOINTMENT SEARCH MENU
         > -----------------------------------------------------
@@ -212,9 +210,10 @@ fun searchingMenu(): Int {
         > ----------------------------------------------------- 
         > ==>> """.trimMargin(">"))
 
-    print("Enter your choice: ")
+    print("\u001B[33mEnter your choice:\u001B[0m ")
     return readLine()?.toIntOrNull() ?: -1
 }
+
 
 fun processSearchingMenuOption(option: Int) {
     when (option) {
