@@ -11,7 +11,7 @@ data class Appointment(var appointmentId: Int = 0,
         if (isScheduled)
             "$appointmentId: $date $time  $treatment $price $review(Scheduled)"
         else
-            "$appointmentId: $time $treatment $price $review (Not Available)"
+            "$appointmentId: $time $treatment $price $review (Not Scheduled)"
 
 
 }

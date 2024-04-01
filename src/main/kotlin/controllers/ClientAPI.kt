@@ -29,7 +29,7 @@ class ClientAPI(serializerType: Serializer) {
     fun numberOfClients() = clients.size
 
     fun updateClient(id: Int, client: Client?): Boolean {
-        val foundClient = findClientById(id)
+        val foundClient = searchClientById(id)
         if ((foundClient != null) && (client != null)) {
             foundClient.firstName = client.firstName
             foundClient.lastName = client.lastName
@@ -42,7 +42,8 @@ class ClientAPI(serializerType: Serializer) {
         return false
     }
 
-    fun findClientById(clientId: Int) = clients.find { client -> client.clientId == clientId }
+
+    fun searchClientById(clientId: Int) = clients.find { client -> client.clientId == clientId }
 
     fun searchClientByFirstName(searchString: String) =
         Utilities.formatListString(
@@ -54,6 +55,26 @@ class ClientAPI(serializerType: Serializer) {
             clients.filter { client -> client.lastName.contains(searchString, ignoreCase = true) }
         )
 
+    fun searchAppointmentById(searchInt: Int): String {
+        return if (numberOfClients() == 0) {
+            "No clients stored"
+        } else {
+            var listOfClients = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.appointmentId == searchInt) {
+                        listOfClients += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                    }
+                }
+            }
+            if (listOfClients == "") {
+                "No items found for: $searchInt"
+            } else {
+                listOfClients
+            }
+        }
+    }
+
     fun searchClientByAddress(searchString: String) =
         Utilities.formatListString(
             clients.filter { client -> client.address.contains(searchString, ignoreCase = true) }
@@ -64,7 +85,112 @@ class ClientAPI(serializerType: Serializer) {
         Utilities.formatListString(
             clients.filter { client -> client.phone == searchInt }
         )
+    fun searchAppointmentByDate(searchString: String): String {
+        return if (numberOfClients() == 0) {
+            "No clients stored"
+        } else {
+            var listOfClients = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.date.contains(searchString)) {
+                        listOfClients += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                    }
+                }
+            }
+            if (listOfClients == "") {
+                "No items found for: $searchString"
+            } else {
+                listOfClients
+            }
+        }
+    }
 
+    fun searchAppointmentByCategories(searchString: String): String {
+        return if (numberOfClients() == 0) {
+            "No clients stored"
+        } else {
+            var listOfClients = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.treatment.contains(searchString)) {
+                        listOfClients += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                    }
+                }
+            }
+            if (listOfClients == "") {
+                "No items found for: $searchString"
+            } else {
+                listOfClients
+            }
+        }
+    }
+
+    fun searchAppointmentByPrice(searchInt: Int): String {
+        return if (numberOfClients() == 0) {
+            "No clients stored"
+        } else {
+            var listOfClients = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.price == searchInt) {
+                        listOfClients += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                    }
+                }
+            }
+            if (listOfClients == "") {
+                "No items found for: $searchInt"
+            } else {
+                listOfClients
+            }
+
+        }
+
+    }
+
+    fun searchAppointmentByReview(searchInt: Int): String {
+        return if (numberOfClients() == 0) {
+            "No clients stored"
+        } else {
+            var listOfClients = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.review == searchInt) {
+                        listOfClients += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                    }
+                }
+            }
+            if (listOfClients == "") {
+                "No items found for: $searchInt"
+            } else {
+                listOfClients
+            }
+        }
+    }
+
+    fun searchClientByEmail(searchString: String) =
+        Utilities.formatListString(
+            clients.filter { client -> client.email.contains(searchString, ignoreCase = true) }
+        )
+
+    fun searchAppointmentByTime(searchDouble: Double): String {
+        return if (numberOfClients() == 0) {
+            "No clients stored"
+        } else {
+            var listOfClients = ""
+            for (client in clients) {
+                for (appointment in client.appointments) {
+                    if (appointment.time == searchDouble) {
+                        listOfClients += "${client.clientId}: ${client.firstName} ${client.lastName} \n\t${appointment}\n"
+                    }
+                }
+            }
+            if (listOfClients == "") {
+                "No items found for: $searchDouble"
+            } else {
+                listOfClients
+            }
+        }
+    }
     fun findClient(index: Int): Client? {
         return if (Utilities.isValidListIndex(index, clients)) {
             clients[index]

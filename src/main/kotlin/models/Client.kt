@@ -9,6 +9,7 @@ data class Client(
     var address: String,
     var email: String,
     var phone: Int,
+    var extraInfo: String,
 
     var appointments: MutableSet<Appointment> = mutableSetOf()
 ) {
@@ -50,20 +51,10 @@ data class Client(
         return appointments.removeIf { appointment -> appointment.appointmentId == id }
     }
 
-    fun checkifAppointmentIsScheduled(): Boolean {
-        if (appointments.isNotEmpty()) {
-            for (appointment in appointments) {
-                if (!appointment.isScheduled) {
 
-                    return false
-                }
-            }
-        }
-        return true
-    }
 
     override fun toString(): String {
-        return "$clientId: $firstName $lastName, Address($address), Email($email), Phone($phone) \n${listAppointments()}"
+        return "$clientId: $firstName $lastName, Address($address), Email($email), Phone($phone), ExtraInfo($extraInfo) \n${listAppointments()}"
     }
 
 }
