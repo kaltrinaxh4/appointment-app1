@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.0"
-    // Plugin for Dokka - KDoc generating tool/
+    // Plugin for Dokka - KDoc generating tool
     id("org.jetbrains.dokka") version "1.9.10"
     // Code coverage tool
     jacoco
