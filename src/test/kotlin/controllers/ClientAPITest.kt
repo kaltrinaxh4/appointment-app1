@@ -1,5 +1,4 @@
-package controllers
-
+import controllers.ClientAPI
 import models.Appointment
 import models.Client
 import persistence.Serializer
@@ -124,5 +123,67 @@ class ClientAPITest {
         }
     }
 
-    // Add more tests
+    @Nested
+    inner class SearchTests {
+
+        // Testing searchClientById
+        @Test
+        fun `searching client by id should return correct client`() {
+            val result = populatedClients?.searchClientById(0)
+            assertEquals(joan, result)
+        }
+
+        @Test
+        fun `searching client by non-existent id should return null`() {
+            val result = populatedClients?.searchClientById(100)
+            assertEquals(null, result)
+        }
+
+
+        @Test
+        fun `searching client by non-existent first name should return empty result`() {
+            val result = populatedClients?.searchClientByFirstName("John")
+            assertEquals("", result)
+        }
+
+
+        @Nested
+        inner class UpdateTests {
+            @Test
+            fun `updating client information should return true`() {
+                val updatedClient = Client(
+                    0,
+                    "Joan",
+                    "Brown",
+                    "1 High Street",
+                    "joan@hotmail.com",
+                    123456789,
+                    "Hair care and styling",
+                    mutableSetOf()
+                )
+                val result = populatedClients?.updateClient(0, updatedClient)
+                assertTrue(result ?: false)
+            }
+
+            @Nested
+            inner class DeleteTests {
+            }
+            @Test
+            fun `deleting an existing client should decrease the number of clients`() {
+                val initialCount = populatedClients?.numberOfClients() ?: 0
+                populatedClients?.deleteClient(0)
+                assertEquals(initialCount - 1, populatedClients?.numberOfClients())
+            }
+
+
+            @Test
+            fun `deleting a non-existent client should not change the number of clients`() {
+                val initialCount = populatedClients?.numberOfClients() ?: 0
+                populatedClients?.deleteClient(100)
+                assertEquals(initialCount, populatedClients?.numberOfClients())
+            }
+
+
+        }
+    }
 }
