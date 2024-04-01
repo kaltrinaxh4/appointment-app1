@@ -1,83 +1,48 @@
-# Appointment Management System
-
-A simple appointment management system that allows you to manage clients, appointments, and services.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+# Client-Appointment Management System
 
 ## Overview
 
-The Appointment Management System is designed to streamline client and appointment management. It includes functionalities for adding clients, scheduling appointments, and managing client information.
+The Appointment Management System is a software application designed to streamline the process of managing client appointments for a salon or similar business. It provides functionalities for adding, updating, and deleting client information and appointments. This system helps salon owners or managers keep track of client appointments, services, and staff schedules efficiently.
+
+## Why Models and Client API
+
+In this project, we utilize models to represent the fundamental entities involved in the appointment management system, such as clients and appointments. The Client API acts as an interface to interact with these models, providing methods for performing various operations like adding, updating, and deleting clients and appointments.
+
+By using models and the Client API, we ensure a modular and organized approach to managing data and business logic. This separation of concerns makes the system easier to maintain, extend, and test.
 
 ## Features
 
-- **Client Management:**
-  - Add, update, delete, and archive clients
-  - Search clients by name
+### 1. Client Management
+   - Add, update, and delete client information.
+   - Search for clients by ID, name, or other attributes.
+   - View a list of all clients or scheduled appointments.
 
-- **Appointment Management:**
-  - Schedule appointments with clients
-  - Cancel and archive appointments
-  - List all appointments and filter by service type
+### 2. Appointment Management
+   - Schedule appointments for clients, specifying details like date, time, service, and staff.
+   - Search for appointments by date, category, price, review rating, or time.
 
-## Project Structure
+### 3. Persistence
+   - Save and load client data to/from XML or JSON files.
+   - Ensure data persistence across application sessions.
 
-The project is organized into the following components:
+### 4. Utilities
+   - Validate appointment dates and categories using utility functions.
 
-- `controllers`: Contains the main logic for managing clients and appointments.
-- `models`: Defines the data models for clients and appointments.
-- `persistence`: Includes classes for loading and storing data.
-- `utils`: Contains utility classes for input/output operations.
+## Testing
 
-## Getting Started
-
-### Prerequisites
-
-- [Prerequisite 1]
-- [Prerequisite 2]
-- ...
-
-### Installation
-
-1. Clone the repository: `git clone [repository-url]`
-2. Navigate to the project folder: `cd appointment-management-system`
-3. [Additional installation steps, if any]
-
-## Usage
-
-Follow these instructions to run the Appointment Management System:
+Comprehensive unit tests are implemented to ensure the reliability and correctness of the system. These tests cover various functionalities, including client management, appointment scheduling, and data persistence.
 
 
- Example commands
-Run the main program
-./run.sh
+## Implementation Details
 
- ##Run tests
-./run-tests.sh
-Contributing
-We welcome contributions! If you would like to contribute to the project, please follow the steps below:
+Additionally, the KDoc plugin is integrated into the project to generate documentation directly from the code comments. This documentation serves as a valuable resource for developers to understand the system's architecture, classes, and methods.
+
+One notable feature of the system is the implementation of a menu system, allowing users to navigate through different functionalities seamlessly. The menu system is hierarchical, with submenus for specific actions within each main menu option. This design enhances user experience and makes the system more intuitive to use.
 
 ## Contributing
 
-We welcome contributions! If you would like to contribute to the project, please follow the steps below:
+Contributions to the Appointment Management System are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
 
-1. **Fork the project**
-2. **Create a new branch** (`git checkout -b feature/your-feature`)
-3. **Commit your changes** (`git commit -m 'Add some feature'`)
-4. **Push to the branch** (`git push origin feature/your-feature`)
-5. **Open a pull request**
+## Author
 
-## License
-
-This project is licensed under the [License Name] - see the [LICENSE](LICENSE) file for details.
-
-### Author
-
-- Kaltrina
+Kaltrina Xhokli
