@@ -1,7 +1,6 @@
 import controllers.ClientAPI
 import models.Appointment
 import models.Client
-import persistence.Serializer
 import persistence.XMLSerializer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.File
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import persistence.JSONSerializer
 
@@ -37,7 +35,7 @@ class ClientAPITest {
 
         Kylie = Client(
             0,
-            "Joan",
+            "Kylie",
             "Smith",
             "1 High Street",
             "joan@hotmail.com",
@@ -261,6 +259,7 @@ class ClientAPITest {
         }
 
     }//
+
     @Nested
     inner class PersistenceTests {
 
@@ -296,11 +295,25 @@ class ClientAPITest {
             assertEquals(0, loadedClients.numberOfClients())
             assertEquals(storingClients.numberOfClients(), loadedClients.numberOfClients())
         }
+    }
 
+    @Nested
+    inner class ListClientTests {
+        @Test
+        fun `test listAllClients when clients are empty`() {
+            val emptyClients = ClientAPI(XMLSerializer(File("empty_clients.xml")))
+            val result = emptyClients.listAllClients()
+            assertEquals("No clients stored", result)
+        }
 
-    }//
+        @Test
+        fun `test numberOfClients when clients are empty`() {
+            val emptyClients = ClientAPI(XMLSerializer(File("empty_clients.xml")))
+            val result = emptyClients.numberOfClients()
+            assertEquals(0, result)
+        }
+    }
 }
-
 
 
 
