@@ -6,10 +6,10 @@ import java.time.format.DateTimeParseException
 object DateofAppointmentUtility {
     @JvmStatic
     fun isDateCorrect(dateToCheck: String?): Boolean {
-        val dateFormatter1 = DateTimeFormatter.ofPattern("_/__/____")
-        val dateFormatter2 = DateTimeFormatter.ofPattern("__/__/____")
-        val dateFormatter3 = DateTimeFormatter.ofPattern("__/_/____")
-        val dateFormatter4 = DateTimeFormatter.ofPattern("_/_/____")
+        val dateFormatter1 = DateTimeFormatter.ofPattern("d/MM/yyyy")
+        val dateFormatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val dateFormatter3 = DateTimeFormatter.ofPattern("dd/M/yyyy")
+        val dateFormatter4 = DateTimeFormatter.ofPattern("d/M/yyyy")
 
         val formatters = listOf(dateFormatter1, dateFormatter2, dateFormatter3, dateFormatter4)
 
