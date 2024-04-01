@@ -246,7 +246,7 @@ class ClientAPITest {
             assertTrue(result?.contains("Sophie Williams") ?: false)
         }
 
-
+//
         @Test
         fun `checkIfThereAreClients should return appropriate message when there are clients`() {
             val result = populatedClients?.checkIfThereAreClients()
