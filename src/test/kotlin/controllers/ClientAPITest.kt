@@ -298,7 +298,7 @@ class ClientAPITest {
         }
 
 
-    }
+    }//
 }
 
 
