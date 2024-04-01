@@ -24,7 +24,7 @@ object ValidateInput
     fun readValidReview(prompt: String?): Int {
         var input = ScannerInput.readNextInt(prompt)
         do {
-            if (Utilities.validRange(input, 1 ,5))
+            if (Utilities.validRange(input, 1 ,10))
                 return input
             else {
                 print("Invalid review $input. Enter a review from 1 to 10")
@@ -57,7 +57,7 @@ object ValidateInput
             if (CategoryUtility.isValidCategory(input))
                 return input
             else {
-                print("Invalid category $input.  Please try again: ")
+                print("Invalid category $input.  Please try again by checking categories in CategoryUtility: ")
                 input = Scanner(System.`in`).nextLine()
             }
         } while (true)
@@ -75,7 +75,7 @@ object ValidateInput
             if (DateofAppointmentUtility.isDateCorrect(input))
                 return input
             else {
-                print("Invalid date $input.  Please try again: ")
+                print("Invalid date $input.  Please try again by entering like this __/__/____: ")
                 input = Scanner(System.`in`).nextLine()
             }
         } while (true)
