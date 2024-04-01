@@ -1,15 +1,13 @@
 import controllers.ClientAPI
 import models.Appointment
 import models.Client
-//import persistence.JSONSerializer
+
 import persistence.XMLSerializer
 import utils.ScannerInput
-//import utils.ScannerInput
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import utils.ValidateInput
 import utils.ValidateInput.readValidDateofAppointment
-
 import utils.ValidateInput.readValidPhone
 import utils.ValidateInput.readValidReview
 import utils.ValidateInput.readValidCategory
@@ -17,7 +15,7 @@ import java.io.File
 import kotlin.system.exitProcess
 
 
-private val clientAPI = ClientAPI(XMLSerializer(File("notes.xml")))
+private val clientAPI = ClientAPI(XMLSerializer(File("clients.xml")))
 
 fun main() = runMenu()
 
@@ -128,7 +126,7 @@ fun runAppointmentMenu() {
 fun processAppointmentMenuOption(option: Int) {
     when (option) {
         7 -> addAppointment()
-        8 -> listConfirmedAppointments()
+        8 -> listScheduledAppointments()
         9 -> updateAppointment()
         10 -> deleteAppointment()
         else -> println("Invalid menu choice: $option")
@@ -157,9 +155,7 @@ fun addAppointment() {
     addAppointmentForClient(isScheduled)
 }
 
-fun listConfirmedAppointments() {
-    listScheduledAppointments()
-}
+
 
 fun updateAppointment() {
     val isScheduled = readBooleanFromUserInputOfAppointmentConfirmationStatus()
@@ -290,7 +286,7 @@ fun listNumberOfAllClients() = println(clientAPI.numberOfClients())
 
 fun listScheduledAppointments(){
     if (clientAPI.listScheduledAppointments() > 0.toString()) {
-        println("Total Confirmed Appointments: ${clientAPI.listScheduledAppointments()}")
+        println("Total Scheduled Appointments: ${clientAPI.listScheduledAppointments()}")
     }
     println(clientAPI.listScheduledAppointments())
 }
@@ -380,12 +376,6 @@ fun clearAllClients()
     println( " All clients have been cleared from the system")
 }
 
-
-fun listClientsbyId()
-{
-    val searchResults = readNextInt("Enter the client's Id: ")
-    println(clientAPI.searchClientById(searchResults))
-}
 
 
 fun searchClientsByFirstName()
