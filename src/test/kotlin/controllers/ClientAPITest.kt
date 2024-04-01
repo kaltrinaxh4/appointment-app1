@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import persistence.JSONSerializer
 
+/**
+ * Test class for ClientAPI functionality.
+ */
 class ClientAPITest {
 
     private var Kylie: Client? = null
@@ -102,6 +105,9 @@ class ClientAPITest {
         emptyClients = null
     }
 
+    /**
+     * Nested test class for addClient method.
+     */
     @Nested
     inner class AddClientTests {
         @Test
@@ -122,6 +128,9 @@ class ClientAPITest {
         }
     }
 
+    /**
+     * Nested test class for search methods.
+     */
     @Nested
     inner class SearchTests {
 
@@ -138,14 +147,15 @@ class ClientAPITest {
             assertEquals(null, result)
         }
 
-
         @Test
         fun `searching client by non-existent first name should return empty result`() {
             val result = populatedClients?.searchClientByFirstName("John")
             assertEquals("", result)
         }
 
-
+        /**
+         * Nested test class for updateClient method.
+         */
         @Nested
         inner class UpdateTests {
             @Test
@@ -164,6 +174,9 @@ class ClientAPITest {
                 assertTrue(result ?: false)
             }
 
+            /**
+             * Nested test class for deleteClient method.
+             */
             @Nested
             inner class DeleteTests {
             }
@@ -174,7 +187,6 @@ class ClientAPITest {
                 populatedClients?.deleteClient(0)
                 assertEquals(initialCount - 1, populatedClients?.numberOfClients())
             }
-
 
             @Test
             fun `deleting a non-existent client should not change the number of clients`() {
@@ -199,6 +211,9 @@ class ClientAPITest {
             }
         }
 
+        /**
+         * Nested test class for searchAppointment methods.
+         */
         @Nested
         inner class SearchAppointments {
             @Test
@@ -244,7 +259,6 @@ class ClientAPITest {
             assertTrue(result?.contains("Sophie Williams") ?: false)
         }
 
-
         @Test
         fun `checkIfThereAreClients should return appropriate message when there are clients`() {
             val result = populatedClients?.checkIfThereAreClients()
@@ -258,8 +272,11 @@ class ClientAPITest {
             assertEquals("Currently there are no clients stored", result ?: "")
         }
 
-    }//
+    }
 
+    /**
+     * Nested test class for persistence methods.
+     */
     @Nested
     inner class PersistenceTests {
 
@@ -279,7 +296,6 @@ class ClientAPITest {
             assertEquals(storingClients.numberOfClients(), loadedClients.numberOfClients())
         }
 
-
         @Test
         fun `saving and loading an empty collection in JSON doesn't crash app`() {
             // Saving an empty notes.json file.
@@ -297,6 +313,9 @@ class ClientAPITest {
         }
     }
 
+    /**
+     * Nested test class for listing clients.
+     */
     @Nested
     inner class ListClientTests {
         @Test
@@ -314,6 +333,3 @@ class ClientAPITest {
         }
     }
 }
-
-
-

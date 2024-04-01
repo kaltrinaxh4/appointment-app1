@@ -5,8 +5,14 @@ import org.junit.jupiter.api.Test
 import utils.CategoryUtility.categories
 import utils.CategoryUtility.isValidCategory
 
+/**
+ * Test class for CategoryUtility.
+ */
 internal class CategoryUtilityTest {
 
+    /**
+     * Test case to verify if categories set contains all expected categories.
+     */
     @Test
     fun categoriesReturnsFullCategoriesSet() {
         Assertions.assertEquals(5, categories.size)
@@ -18,6 +24,9 @@ internal class CategoryUtilityTest {
         Assertions.assertFalse(categories.contains("Threading"))
     }
 
+    /**
+     * Test cases to validate if a category is considered valid.
+     */
     @Test
     fun isValidCategoryTrueWhenCategoryExists() {
         Assertions.assertTrue(isValidCategory("hairdye"))
@@ -28,6 +37,9 @@ internal class CategoryUtilityTest {
         Assertions.assertFalse(isValidCategory("threading"))
     }
 
+    /**
+     * Test cases to validate if a category is considered invalid.
+     */
     @Test
     fun isValidCategoryFalseWhenCategoryDoesNotExist() {
         Assertions.assertFalse(isValidCategory("Haird"))
